@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+
+<config>
+    <modules>
+        <CLExchange_Clexchangefunding>
+            <version>1.0.0.0</version>
+        </CLExchange_Clexchangefunding>
+    </modules>
+    <frontend>
+        <routers>
+            <clxfunding>
+                <use>standard</use>
+                <args>
+                    <module>CLExchange_Clexchangefunding</module>
+                    <frontName>clxfunding</frontName>
+                </args>
+            </clxfunding>
+        </routers>
+        <events>
+            <payment_method_is_active>
+                <observers>
+                    <clxfunding_payment_method_is_active>
+                        <type>singleton</type>
+                        <class>clxfunding/observer</class>
+                        <method>paymentMethodIsActive</method>
+                    </clxfunding_payment_method_is_active>
+                </observers>
+            </payment_method_is_active>
+            <core_block_abstract_to_html_after>
+                <observers>
+                    <clxfunding_custom_order_view_info>
+                        <class>clxfunding/observer</class>
+                        <method>addCustomMessage</method>
+                    </clxfunding_custom_order_view_info>
+                </observers>
+            </core_block_abstract_to_html_after>
+        </events>
+        <layout>
+            <updates>
+                <clx_custom module="CLExchange_Clexchangefunding">
+                    <file>clxblock.xml</file>
+                </clx_custom>
+            </updates>
+            <updates>
+                <clx_custom_n module="CLExchange_Clexchangefunding">
+                    <file>clxfunding.xml</file>
+                </clx_custom_n>
+            </updates>
+        </layout>
+    </frontend>
+    <global>
+        <models>
+            <clxfunding>
+                <class>CLExchange_Clexchangefunding_Model</class>
+                <resourceModel>clxfunding_mysql4</resourceModel>
+            </clxfunding>
+            <clxfunding_mysql4>
+                <class>CLExchange_Clexchangefunding_Model_Mysql4</class>
+                <entities>
+                    <clxloanappdtls>
+                        <table>clx_loan_application_detail</table>
+                    </clxloanappdtls>
+                    <clxloanofferdetails>
+                        <table>clx_loan_offer_detail</table>
+                    </clxloanofferdetails>
+                </entities>
+            </clxfunding_mysql4>
+        </models>
+        <resources>
+            <clxfunding_setup>
+                <setup>
+                    <module>CLExchange_Clexchangefunding</module>
+                    <class>CLExchange_Clexchangefunding_Model_Resource_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </clxfunding_setup>
+            <clxfunding_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </clxfunding_write>
+            <clxfunding_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </clxfunding_read>
+        </resources>
+        <helpers>
+            <clxfunding>
+                <class>CLExchange_Clexchangefunding_Helper</class>
+            </clxfunding>
+        </helpers>
+ 
+        <blocks>
+            <clxfunding>
+                <class>CLExchange_Clexchangefunding_Block</class>
+            </clxfunding>
+        </blocks>
+        <events>
+            <checkout_onepage_index>
+                <observers>
+                    <clxfunding>
+                        <type>singleton</type>
+                        <class>clxfunding/observer</class>
+                        <method>paymentMethodIsActive</method>
+                    </clxfunding>
+                </observers>
+            </checkout_onepage_index>
+        </events>
+        <template>
+            <email>
+                <clx_loan_approve_email_template>
+                    <label>Clx Loan Approve Template</label>
+                    <file>CLX/email-template/clx_loan_approved.html</file>
+                    <type>html</type>
+                </clx_loan_approve_email_template>
+                <clx_loan_funded_email_template>
+                    <label>Clx Loan Funded Template</label>
+                    <file>CLX/email-template/clx_loan_funded.html</file>
+                    <type>html</type>
+                </clx_loan_funded_email_template>
+                <clx_loan_funded_user_email_template>
+                    <label>Clx Loan Funded User Template</label>
+                    <file>CLX/email-template/clx_loan_funded_U.html</file>
+                    <type>html</type>
+                </clx_loan_funded_user_email_template>
+                <clx_loan_offerdetail_email_template>
+                    <label>Clx Loan Offer Template</label>
+                    <file>CLX/email-template/clx_loan_offer.html</file>
+                    <type>html</type>
+                </clx_loan_offerdetail_email_template>
+                <clx_loan_offerreject_email_template>
+                    <label>Clx Loan Offer Reject Template</label>
+                    <file>CLX/email-template/clx_loan_offer_reject.html</file>
+                    <type>html</type>
+                </clx_loan_offerreject_email_template>
+                <clx_loan_offer_details_email_template>
+                    <label>Clx Loan Offer Details Template</label>
+                    <file>CLX/email-template/clx_loan_offer_details.html</file>
+                    <type>html</type>
+                </clx_loan_offer_details_email_template>
+                <clx_error_email_template>
+                    <label>Clx Error Details Template</label>
+                    <file>CLX/email-template/clx_error.html</file>
+                    <type>html</type>
+                </clx_error_email_template>
+                <clx_auto_order_cancel_email_template>
+                    <label>Clx Auto Order Cancel Template</label>
+                    <file>CLX/email-template/clx_auto_order_cancel.html</file>
+                    <type>html</type>
+                </clx_auto_order_cancel_email_template>
+            </email>
+        </template>
+        
+    </global>
+    <crontab>
+        <jobs>            
+            <clxfunding_setStatus>
+                <schedule>
+                    <!--<cron_expr>*/5 * * * *</cron_expr>-->
+                    <config_path>payment/clxfunding/cron_expr</config_path>
+                </schedule>
+                <run>
+                    <model>clxfunding/Observer::checkCron</model>
+                </run>
+            </clxfunding_setStatus>
+            <clxfunding_timeframe>
+                <schedule>
+                    <cron_expr>0 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>clxfunding/Observer::timeframeCancelOrder</model>
+                </run>
+            </clxfunding_timeframe>
+        </jobs>
+    </crontab>
+    <default>
+        <payment>
+            <clxfunding>
+                <active>0</active>
+                <model>clxfunding/paymentmethod</model>
+                <order_status>pending</order_status>
+                <title>Purchase Through Loan</title>
+                <allowspecific>0</allowspecific>
+                <payment_action>sale</payment_action>
+                <sort_order>3</sort_order>
+            </clxfunding>
+        </payment>
+    </default>
+    <adminhtml>
+        <layout>
+            <updates>
+                <clx_custom module="CLExchange_Clexchangefunding">
+                    <file>clxfunding.xml</file>
+                </clx_custom>
+            </updates>
+        </layout>
+        <events>
+            <core_block_abstract_to_html_after>
+                <observers>
+                    <mymodule_custom_order_view_info>
+                        <class>clxfunding/observer</class>
+                        <method>getSalesOrderViewInfo</method>
+                    </mymodule_custom_order_view_info>
+                </observers>
+            </core_block_abstract_to_html_after>
+        </events>
+    </adminhtml>
+</config>

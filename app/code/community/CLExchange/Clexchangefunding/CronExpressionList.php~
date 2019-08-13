@@ -1,0 +1,16 @@
+<?php
+class CLExchange_Clexchangefunding_CronExpressionList
+{
+    /* here we can update select field values of Cron Expression in admin panel under CLExchange Payment Module tab*/
+    public function toOptionArray()
+    {
+        return array(
+            array('value' => '*/5 * * * *', 'label'=>Mage::helper('adminhtml')->__('Every 5 minutes')),
+            array('value' => '*/10 * * * *', 'label'=>Mage::helper('adminhtml')->__('Every 10 minutes')),
+            array('value' => '30 * * * *', 'label'=>Mage::helper('adminhtml')->__('Every 30 minutes')),
+            array('value' => '0 0 */1 * * *', 'label'=>Mage::helper('adminhtml')->__('Every Hours')),
+            array('value' => '0 0 */2 * * *', 'label'=>Mage::helper('adminhtml')->__('Every 2 Hours')),
+            array('value' => '0 0 */3 * * *', 'label'=>Mage::helper('adminhtml')->__('Every 3 Hours')),
+        );
+    }
+}

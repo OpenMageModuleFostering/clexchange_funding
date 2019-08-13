@@ -1,0 +1,16 @@
+{
+    "name": "OpenMageModuleFostering/Clexchange_Funding",
+    "type": "magento-module",
+    "license": "Open-Software-License-(OSL)",
+    "homepage": "",
+    "description": "CLX Funding allows users to submit an online loan application to lenders from the checkout page itself",
+    "authors": [
+    {
+        "name": "Dhananjay Goel",
+        "email": "dhananjay.goel@agstechnologies.com"
+    }
+],
+    "suggest": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}

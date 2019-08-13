@@ -1,0 +1,32 @@
+<?php
+$data = $this->getLoanOfferStatus();
+?>
+<div class="">
+    <div class="" style="width:80%">
+        <?php if (isset($data) && !empty($data)) {
+            if (isset($data->application_status) && $data->application_status == "ACCEPTED") {
+                ?>
+                <form name="loan_offer_acceptance_res" id="loan_offer_acceptance_res" method="post" action="<?php echo Mage::getBaseUrl() . 'clxfunding/ClxAPI/saveOrderCustom'; ?>">
+                    <div class="">
+                        <p>Your application has been accepted, you will receive a confirmation email soon.</p>
+                        <div class="buttons-set border-top-none">
+                            <button type="submit" class="button align-left" id="Confirm_Acceptance_Continue" title="Continue"><span><span>Continue to save order</span></span></button>
+                        </div>
+                    </div>
+                </form>
+    <?php } else { ?>
+                <div class="">
+                    <p>We are sorry to inform you that your loan application cannot be processed further.</p>
+                    <div class="buttons-set border-top-none">
+                        <button type="button" class="button align-left" title="My Account" onclick="redirectURL()"><span><span>My Account</span></span></button>
+                    </div>
+                </div>
+    <?php }
+    } ?>
+    </div>
+</div>
+<script>
+    function redirectURL() {
+        window.location.href = "<?php echo Mage::getBaseUrl().'customer/account'; ?>";
+    }
+</script>

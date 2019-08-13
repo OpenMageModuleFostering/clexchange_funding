@@ -1,0 +1,15 @@
+<div class="">
+    <div class="">
+        <div class="" style="width:80%">
+            <p>Your order has been canceled.Thank you for choosing <strong>Online Loan</strong>.</p>
+            <div class="buttons-set border-top-none">
+                <button class="button align-left" onclick="redirectURL()" title="My Account"><span><span>My Account</span></span></button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function redirectURL() {
+        window.location.href = "<?php echo Mage::getBaseUrl().'customer/account'; ?>";
+    }
+</script>

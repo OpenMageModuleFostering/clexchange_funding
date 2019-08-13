@@ -1,0 +1,353 @@
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <form role="form" id="my-clxloan-form" action="javascript:void(0);" data-action="<?php echo Mage::getBaseUrl().'custompaymentmethod/ClxAPI/loanAppProcessing';?>">
+            <!--Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a href="javascript:void(0);" class="clx_modal_form_close" data-dismiss="modal">x</a>
+                    <center><h4 class="modal-title">LOAN APPLICATION</h4></center>
+
+                </div>
+                <div class="modal-body">
+
+                    <div class="fieldset">
+
+
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a data-toggle="tab" style="display:block !important;" href="#home">General info1</a></li>
+                            <li><a data-toggle="tab" href="#menu1">General info2</a></li>
+                            <li><a data-toggle="tab" href="#menu2">Verification</a></li>
+                            <li><a data-toggle="tab" href="#menu3">Loan information</a></li>
+                        </ul>
+                        <ul id="clx-loanform" class="form-list tab-content">
+                            <p class="required">* Required Fields</p><br>
+                            <div id="home" class="tab-pane fade in active"><br>
+                                <li>
+                                    <label for="login-email" class="required"><em>*</em>First Name:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry" id="firstName" name="firstName" value="">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="login-email" class="required"><em>*</em>Last Name:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry" id="lastName" name="lastName" value="">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="login-email" class="required"><em>*</em>Email Address:</label>
+                                    <div class="input-box">
+                                        <input type="email" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry validate-email" id="emailId" name="emailId" value="">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="login-email" class="required"><em>*</em>Date of birth:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry" id="birthDate" name="birthDate" value="">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="login-email" class="required"><em>*</em>Street:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry" id="street" name="street" value="">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="login-email" class="required"><em>*</em>Mobile phone area code:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry" id="mobilePhoneAreaCode" name="mobilePhoneAreaCode" value="">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="login-email" class="required"><em>*</em>Mobile number:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry" id="mobileNumber" name="mobileNumber" value="">
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <label for="login-email" class="required"><em>*</em>City:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry" id="city" name="city" value="">
+                                    </div>
+                                </li>
+                            </div>
+                            <div id="menu1" class="tab-pane fade">
+                                <li>
+                                    <label for="login-email" class="required"><em>*</em>State:</label>
+                                    <div class="input-box">
+                                        <select class="input-text"  id="state" name="state">
+                                            <option>Alabama</option>
+                                            <option>Alaska</option>
+                                            <option>Arizona</option>
+                                            <option>Arkansas</option>
+                                            <option>California</option>
+                                            <option>Colorado</option>
+                                            <option>Connecticut</option>
+                                            <option>Delaware</option>
+                                            <option>District Of Columbia</option>
+                                            <option>Florida</option>
+                                            <option>Georgia</option>
+                                            <option>Hawaii</option>
+                                            <option>Idaho</option>
+                                            <option>Illinois</option>
+                                            <option>Indiana</option>
+                                            <option>Iowa</option>
+                                            <option>Kansas</option>
+                                            <option>Kentucky</option>
+                                            <option>Louisiana</option>
+                                            <option>Maine</option>
+                                            <option>Maryland</option>
+                                            <option>Massachusetts</option>
+                                            <option>Michigan</option>
+                                            <option>Minnesota</option>
+                                            <option>Mississippi</option>
+                                            <option>Missouri</option>
+                                            <option>Montana</option>
+                                            <option>Nebraska</option>
+                                            <option>Nevada</option>
+                                            <option>New Hampshire</option>
+                                            <option>New Jersey</option>
+                                            <option>New Mexico</option>
+                                            <option>New York</option>
+                                            <option>North Carolina</option>
+                                            <option>North Dakota</option>
+                                            <option>Ohio</option>
+                                            <option>Oklahoma</option>
+                                            <option>Oregon</option>
+                                            <option>Pennsylvania</option>
+                                            <option>Rhode Island</option>
+                                            <option>South Carolina</option>
+                                            <option>South Dakota</option>
+                                            <option>Tennessee</option>
+                                            <option>Texas</option>
+                                            <option>Utah</option>
+                                            <option>Vermont</option>
+                                            <option>Virginia</option>
+                                            <option>Washington</option>
+                                            <option>West Virginia</option>
+                                            <option>Wisconsin</option>
+                                            <option>Wyoming</option>
+                                            <option>American Samoa</option>
+                                            <option>Guam</option>
+                                            <option>Northern Mariana Islands</option>
+                                            <option>Puerto Rico</option>
+                                            <option>United States Minor Outlying</option>
+                                            <option>Islands</option>
+                                            <option>Virgin Islands</option>
+                                        </select>
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="login-email" class="required"><em>*</em>Zipcode:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry" id="zipcode" name="zipcode" value="">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="login-email" class="required"><em>*</em>Country:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry" id="country" name="country" value="">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="login-email" class="required"><em>*</em>Yearly income:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry" id="yearlyIncome" name="yearlyIncome" value="">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="login-email" class="required"><em>*</em>Employment status:</label>
+                                    <div class="input-box">
+                                        <select class="input-text"  id="employmentStatus" name="employmentStatus">
+                                            <option>Self Employed</option>
+                                            <option>Not Employed</option>
+                                            <option>Other</option>
+                                            <option>Employed</option>
+                                        </select>
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="login-email" class="required"><em>*</em>Occupation:</label>
+                                    <div class="input-box">
+                                        <select class="input-text"  id="occupation" name="occupation">
+                                            <option>Accountant/CPA</option>
+                                            <option>Analyst</option>
+                                            <option>Architect</option>
+                                            <option>Attorney</option>
+                                            <option>Biologist</option>
+                                            <option>Bus Driver</option>
+                                            <option>Car Dealer</option>
+                                            <option>Chemist</option>
+                                            <option>Civil Service</option>
+                                            <option>Clergy</option>
+                                            <option>Clerical</option>
+                                            <option>Computer Programmer</option>
+                                            <option>Construction</option>
+                                            <option>Dentist</option>
+                                            <option>Doctor</option>
+                                            <option>Engineer- Chemical</option>
+                                            <option>Engineer- Electrical</option>
+                                            <option>Engineer- Mechanical</option>
+                                            <option>Executive</option>
+                                            <option>Fireman</option>
+                                            <option>Flight Attendant</option>
+                                            <option>Food Service</option>
+                                            <option>Food Service Management</option>
+                                            <option>Homemaker</option>
+                                            <option>Judge</option>
+                                            <option>Laborer</option>
+                                            <option>Landscaping</option>
+                                            <option>Medical Technician</option>
+                                            <option>Military Enlisted</option>
+                                            <option>Military Officer</option>
+                                            <option>Nurse (LPN)</option>
+                                            <option>Nurse (RN)</option>
+                                            <option>Nurse's Aide</option>
+                                            <option>Pharmacist</option>
+                                            <option>Pilot- Private/Commercial</option>
+                                            <option>Police- Officer/Correction officer</option>
+                                            <option>Postal Service</option>
+                                            <option>Principal</option>
+                                            <option>Professional</option>
+                                            <option>Professor</option>
+                                            <option>Psychologist</option>
+                                            <option>Realtor</option>
+                                            <option>Religious</option>
+                                            <option>Retail Management</option>
+                                            <option>Sales- Commission</option>
+                                            <option>Sales- Retails</option>
+                                            <option>Scientist</option>
+                                            <option>Administrative Assistant</option>
+                                            <option>Skilled Labor</option>
+                                            <option>Social Worker</option>
+                                            <option>Student</option>
+                                            <option>Teacher</option>
+                                            <option>Teacher's Aide</option>
+                                            <option>Tradesman- Carpenter</option>
+                                            <option>Tradesman- Electrician</option>
+                                            <option>Tradesman- Mechanic</option>
+                                            <option>Tradesman- Plumber</option>
+                                            <option>Truck Driver</option>
+                                            <option>Waiter/Waitress</option>
+                                            <option>Other</option>
+                                            <option>Investor</option>
+                                        </select>
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="login-email" class="required"><em>*</em>Employer name:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry" id="employerName" name="employerName" value="">
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <label for="login-email" class="required"><em>*</em>Employment start date:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry " id="employmentStartDate" name="employmentStartDate" value="">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="login-email" class="required"><em>*</em>Self reported credit score:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry " id="selfReportedCreditScore" name="selfReportedCreditScore" value="">
+                                    </div>
+                                </li>
+                            </div>
+                            <div id="menu2" class="tab-pane fade">
+                                <li>
+                                    <label for="bankName" class="required"><em>*</em>Bank name:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry " id="bankName" name="bankName" value="">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="firstAccountHolderName" class="required"><em>*</em>First account holder name:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry " id="firstAccountHolderName" name="firstAccountHolderName" value="">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="bankAccountType" class="required"><em>*</em>Bank account type:</label>
+                                    <div class="input-box">
+                                        <select class="input-text"  id="bankAccountType" name="bankAccountType">
+                                            <option>Savings</option>
+                                            <option>Checking</option>
+                                            <option>Credit</option>
+                                        </select>
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="bankAccountNumber" class="required"><em>*</em>Bank account number:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry " id="bankAccountNumber" name="bankAccountNumber" value="">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="routingNumber" class="required"><em>*</em>Routing number:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry " id="routingNumber" name="routingNumber" value="">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="ssn" class="required"><em>*</em>ssn:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry " id="ssn" name="ssn" value="">
+                                    </div>
+                                </li>
+
+                            </div>
+                            <div id="menu3" class="tab-pane fade">
+                                <li>
+                                    <label for="loanAmount" class="required"><em>*</em>Loan amount:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry " id="loanAmount" name="loanAmount" value="">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="loanPurpose" class="required"><em>*</em>Loan purpose:</label>
+                                    <div class="input-box">
+                                        <select class="input-text"  id="loanPurpose" name="loanPurpose">
+                                            <option>Debt consolidation</option>
+                                            <option>Home improvement</option>
+                                            <option>Business</option>
+                                            <option>Auto</option>
+                                            <option>Other</option>
+                                            <option>Baby & adoption loans</option>
+                                            <option>Boat</option>
+                                            <option>Cosmetic procedures</option>
+                                            <option>Green loans</option>
+                                            <option>Household expenses</option>
+                                            <option>Large purchases</option>
+                                            <option>Medical/Dental</option>
+                                            <option>Motorcycle</option>
+                                            <option>RV</option>
+                                            <option>Taxes</option>
+                                            <option>Vacation</option>
+                                            <option>Special Occasion</option>
+                                        </select>
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="loanTerms" class="required"><em>*</em>Loan terms:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry" id="loanTerms" name="loanTerms" value="">
+                                    </div>
+                                </li>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" name="submit" class="input-text submitss btn btn-default" value="Apply loan">
+                    <a href="javascript:void(0);" class="btn btn-default clx_modal_form_close" data-dismiss="modal">Close</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!--<script>jQuery.noConflict()</script>-->

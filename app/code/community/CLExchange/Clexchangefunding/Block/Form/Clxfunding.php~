@@ -1,0 +1,11 @@
+<?php
+
+// app/code/local/Envato/Clexchangefunding/Block/Form/Clexchangefunding.php
+class CLExchange_Clexchangefunding_Block_Form_Clexchangefunding extends Mage_Payment_Block_Form {
+
+    protected function _construct() {
+        parent::_construct();
+        $this->setTemplate('clxfunding/form/clxfunding.phtml');
+    }
+
+}

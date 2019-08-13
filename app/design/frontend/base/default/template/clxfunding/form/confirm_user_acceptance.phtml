@@ -1,0 +1,22 @@
+<!-- trash file -->
+<div class="">
+    <div class="">
+        <form name="loan_offer_acceptance" id="loan_offer_acceptance" method="post" action="<?php echo Mage::getBaseUrl() . 'clxfunding/ClxAPI/checkLoanOfferAcceptanceStatus'; ?>">
+            <div class="" style="width:80%">
+                <div class="page-title">
+                </div>
+                <h5 class="sub-title">Thank you for choosing Online Loan</h5>
+                <p>Please confirm your acceptance of the selected loan offer.</p>
+                <div class="buttons-set border-top-none">
+                    <button type="button" class="button align-left" title="Continue Shopping" onclick="redirectURL()"><span><span>I Reject</span></span></button>
+                    <button type="submit" class="button align-left" id="Confirm_Acceptance_Submit" title="Confirm Acceptance"><span><span>I Accept</span></span></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function redirectURL() {
+        window.location.href = "<?php echo Mage::getBaseUrl().'customer/account'; ?>";
+    }
+</script>

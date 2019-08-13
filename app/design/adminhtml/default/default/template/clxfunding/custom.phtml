@@ -1,0 +1,27 @@
+<?php 
+$order = $this->getOrder(); // Admin Menu: Sales/orders & clicked view link
+$clx_order_id = $order->getRealOrderId(); // get order id
+$table_prefix = Mage::getConfig()->getTablePrefix();
+$clx_table = $table_prefix . 'clx_loan_application_detail';
+$connectionRead = Mage::getSingleton('core/resource')->getConnection('core_read');
+$select = $connectionRead->select()
+        ->from($clx_table, array('*'))
+        ->where('order_id=?',$clx_order_id); //check whether, this order is placed using Online loan payment method using our custom table `clx_loan_application_detail`
+$row = $connectionRead->fetchRow($select);   //return rows
+
+/* Show loan application status block only if order id  is exist in our table
+ */
+if (isset($row) && !empty($row) && is_array($row) && isset($row['clx_loan_application_detail_id'])){
+?>
+<div class="entry-edit box-left">
+    <div class="entry-edit-head">
+        <h4 class="icon-head"><?php echo $this->__('CLExchange Application Status') ?></h4>
+    </div>
+    <fieldset>
+        <div id="mymodule_custom_block">
+            Current loan application status for this order : <?php echo $row['status'];?>
+        </div>
+    </fieldset>
+</div>
+<div class="clear"></div>
+<?php }?>

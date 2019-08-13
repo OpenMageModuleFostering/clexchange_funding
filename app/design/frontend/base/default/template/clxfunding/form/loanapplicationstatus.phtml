@@ -1,0 +1,45 @@
+<div id="loanApplicationStatus" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <center><h4 class="modal-title">Loan Application Status</h4></center>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <?php
+                    $data = $this->getLoanApplication();
+                    $ApprovalRequired = $this->getApprovalRequired();
+                    if (isset($data->application_status)) {
+                        if ($data->application_status == 'ACCEPTED') {
+                            if(isset($ApprovalRequired) && $ApprovalRequired){
+                                echo "<p>Thank you for purchasing the product using the  'Online Loan' payment option. You will receive a mail notification detailing about the loan offer within the next 1 hours.</p>";
+                            }
+                            else{
+                                echo "<p>Your application has been preliminarily approved and it will be processed within 24 hours.</p>";
+                            }
+                        }
+                        if ($data->application_status == 'REJECTED') {
+                            ?>
+                            <p>We are sorry to inform you that your loan application cannot be processed further.</p>
+                        <?php }
+                    } else {
+                        ?>
+                        <p>We are sorry to inform you that your loan application cannot be processed further.</p>
+<?php } ?>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <?php if (isset($data->application_status) && $data->application_status == 'ACCEPTED') {
+                    ?>
+                    <a href="javascript:void(0);" class="btn btn-success clx_funding_continue" data-dismiss="modal">Continue</a>
+                    <?php } else {
+                    ?>
+                    <a href="javascript:void(0);" class="btn btn-primary clx_funding_return" data-dismiss="modal">Ok</a>
+<?php } ?>
+            </div>
+        </div>
+
+    </div>
+</div>

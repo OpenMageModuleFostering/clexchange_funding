@@ -1,0 +1,78 @@
+<?php
+ 
+// Parse magento's local.xml to get db info, if local.xml is found
+ 
+if (file_exists('./../../../../../../app/etc/local.xml')) {
+ 
+$xml = simplexml_load_file('./../../../../../../app/etc/local.xml');
+ 
+$tblprefix = $xml->global->resources->db->table_prefix;
+$dbhost = $xml->global->resources->default_setup->connection->host;
+$dbuser = $xml->global->resources->default_setup->connection->username;
+$dbpass = $xml->global->resources->default_setup->connection->password;
+$dbname = $xml->global->resources->default_setup->connection->dbname;
+ 
+} 
+else {
+    exit('Failed to open app/etc/local.xml');
+}
+ 
+// DB Interaction
+$conn = mysql_connect($dbhost, $dbuser, $dbpass) or die ('Error connecting to <a class="HelpLink" onclick="showHelpTip(event, hint_id_7); return false;" href="javascript:void(0)">mysql</a>');
+mysql_select_db($dbname);
+ 
+$result = mysql_query("SELECT * FROM " . $tblprefix . "clx_loan_offer_detail") or die (mysql_error());
+ 
+ 
+// CSS for NexStyle
+echo '
+<html>
+<head>
+</head>';
+ 
+echo '
+<body>
+<b>Table Prefix:</b> ' . $tblprefix . ''
+. '<b>DB Host:</b> ' . $dbhost . ''
+. '<b>DB User:</b> ' . $dbuser . ''
+. '<b>DB Name</b>: ' . $dbname . '</p>';
+ 
+echo '
+        <table border="1">
+        <thread>
+        <tr>
+        <th>clx_loan_offer_detail_id</th>
+           <th>loan_application_id</th>
+           <th>loanTerm</th>
+           <th>loanAPR</th>
+           <th>loanRate</th>
+           <th>paymentFrequency</th>
+           <th>paymentAmount</th>
+           <th>downPayment</th>
+           <th>offerId</th>
+           <th>showSelectedOfferUrl</th>
+           <th>lenderName</th>
+           </tr>
+           </thread>
+           <tbody>';
+ 
+while ($row = mysql_fetch_array($result)) {
+           echo "<tr>";
+           echo "<td>" . $row['clx_loan_offer_detail_id'] . "</td>";
+           echo "<td>" . $row['loan_application_id'] . "</td>";
+           echo "<td>" . $row['loanTerm'] . "</td>";
+           echo "<td>" . $row['loanAPR'] . "</td>";
+           echo "<td>" . $row['loanRate'] . "</td>";
+           echo "<td>" . $row['paymentFrequency'] . "</td>";
+           echo "<td>" . $row['paymentAmount'] . "</td>";
+           echo "<td>" . $row['downPayment'] . "</td>";
+           echo "<td>" . $row['offerId'] . "</td>";
+           echo "<td>" . $row['showSelectedOfferUrl'] . "</td>";
+           echo "<td>" . $row['lenderName'] . "</td>";
+           echo "</tr>";
+}
+ 
+echo "</tbody></table></body></html>";
+ 
+mysql_close($conn);
+?>

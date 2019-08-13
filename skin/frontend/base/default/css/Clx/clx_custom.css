@@ -1,0 +1,76 @@
+#loading_div
+{
+    z-index: 99999;
+    display:none;
+    position: fixed;
+    top:0;
+    left:0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255,255,255,0.8);
+    background-image: url('loading.gif');
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+.modal-backdrop{
+    background: rgba(1,1,1,0.5) !important;
+}
+.custom_width{
+    width:90% !important;
+}
+.border-top-none{
+    border-top:none !important;
+    text-align: left !important;
+}
+.align-left{
+    float: left !important;
+}
+.custom-clx-error
+{
+    color:red !important;
+}
+.clx_modal_form_css
+{
+    position:absolute;
+    right:1%;
+    padding:0px 5px !important;
+}
+.select_input_f
+{
+    height: 30px !important;
+}
+.clx_info{
+    position: absolute;
+    outline: medium none !important;
+    transform: rotate(7deg);
+    margin-left: 5px;
+}
+.not-active {
+   pointer-events: none;
+   cursor: default;
+}
+.textAlign_c
+{
+    text-align: left !important;
+}
+.custom_modal_open{
+    overflow: hidden;
+}
+.custom_modal_open .modal{
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.custom_width .datepicker-switch{
+    color: black;
+    background-image: linear-gradient(to bottom, #FFF 0%, #E0E0E0 100%);
+    background-repeat: repeat-x;
+    text-shadow: 0px 1px 0px #FFF;
+    border: 1px solid #CCC !important; /* Green */
+}
+.custom_width .datepicker-switch:hover{
+    color: black;
+    background-image: linear-gradient(to bottom, #FFF 0%, #E0E0E0 100%);
+    background-repeat: repeat-x;
+    text-shadow: 0px 1px 0px #FFF;
+    border: 1px solid #CCC !important; /* Green */
+}

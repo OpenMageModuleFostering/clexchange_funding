@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- Functionality : Adding disable_title.js to admin panel & this is for disabling title field in admin panel 
+     Next we have added a block which will show current loan application status to admin.
+-->
+<layout version="1.0">
+    <!-- Adding the block in sales/order/view page -->
+    <adminhtml_sales_order_view>
+        <reference name="order_info">
+            <block type="clxfunding/adminhtml_sales_order_view_info_block" name="mymodule.order.info.custom.block" template="clxfunding/custom.phtml" before="order_history" />
+        </reference>
+    </adminhtml_sales_order_view>
+</layout>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<config>    
+    <sections>
+        <payment>
+            <groups>
+                <clxfunding translate="label" module="clxfunding">
+                    <label>CLExchange Payment Module</label>
+                    <sort_order>1000</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <title translate="label">
+                            <backend_model>clxfunding/PaymentMethodTitle</backend_model> 
+                            <label>Title</label>
+                            <readonly>true</readonly>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <sort_order>1</sort_order>
+                        </title>
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <sort_order>2</sort_order>
+                        </active>
+                        <sort_order translate="label">
+                            <label>Sort order</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </sort_order>
+                        <account_id translate="label">
+                            <label>Account Id</label>
+                            <backend_model>clxfunding/AccountIdV</backend_model>
+                            <comment>Merchant Authentication</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </account_id>
+                        <authorization_field translate="label">
+                            <label>Authorization Key</label>
+                            <backend_model>clxfunding/AuthorizationKeyV</backend_model>
+                            <comment>Merchant Authentication</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </authorization_field>
+                        <is_Best_Offer translate="label">
+                            <label>is Best Offer</label>
+                            <comment>Check the best available offer</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>CLExchange_Clexchangefunding_IsBestOffer</source_model>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </is_Best_Offer>
+                        <approve_Required translate="label">
+                            <label>Approval Required</label>
+                            <comment>Take approval of loan offer from borrower</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>CLExchange_Clexchangefunding_ApprovalRequired</source_model>
+                            <sort_order>7</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </approve_Required>
+                        <queue_authentication_key translate="label">
+                            <label>Queue Authentication Key</label>
+                            <backend_model>clxfunding/QueueAuthKeyV</backend_model>
+                            <comment>Required parameter in API calls to Queue, for tracking applications status</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </queue_authentication_key>
+                        <queue_endpoint translate="label">
+                            <label>Queue Endpoint</label>
+                            <backend_model>clxfunding/QueueEndpointV</backend_model>
+                            <comment>Required parameter in API calls to Queue, for tracking applications status</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>9</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </queue_endpoint>
+                        <cron_expr translate="label" module="clxfunding">
+                            <label>Cron Expression</label>
+                            <comment>Make cron calls to Queue system at regular intervals</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>CLExchange_Clexchangefunding_CronExpressionList</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </cron_expr>
+                        <show_loan_offer translate="label" module="clxfunding">
+                            <label>Show Loan Offer</label>
+                            <comment>Allow user to check for the available loan offers or not</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>CLExchange_Clexchangefunding_ApprovalRequired</source_model>
+                            <sort_order>11</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </show_loan_offer>
+                        <loan_offer_time_frame translate="label" module="clxfunding">
+                            <label>Time Frame (In Hours)</label>
+                            <comment>Define the time period, a borrower has to accept the loan offer</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>CLExchange_Clexchangefunding_TimeFrames</source_model>
+                            <sort_order>12</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </loan_offer_time_frame>
+                        <!--mail_notification_interval translate="label" module="clxfunding">
+                            <label>Daily Mail Notification</label>
+                            <comment>Loan offer mail notification/notifications per day</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>13</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </mail_notification_interval-->
+                    </fields>
+                </clxfunding>
+            </groups>
+        </payment>
+    </sections>
+</config>

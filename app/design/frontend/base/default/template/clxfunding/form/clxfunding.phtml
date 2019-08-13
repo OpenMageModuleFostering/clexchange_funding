@@ -1,0 +1,773 @@
+<?php
+$show_loan_offer_flag = Mage::getStoreConfig('payment/clxfunding/show_loan_offer');
+?>
+<script>
+    jQuery(document).ready(function (jQuery) {
+        
+        var FromEndDate = new Date();
+        var ToEndDate = new Date();
+
+        ToEndDate.setDate(ToEndDate.getDate()+365);
+        jQuery(document).on('focus','#birthDate',function(){
+            var cur_input = jQuery(this);
+            jQuery('#birthDate').datepicker({
+                container:jQuery('#birthDate').closest('div.custom_width'),
+                format: "yyyy-mm-dd",
+                orientation:'top auto',
+                endDate: FromEndDate, 
+                autoclose: true
+            }).on('hide', function (e) {
+                e.preventDefault();
+                jQuery(cur_input).removeAttr('style');
+            }).on('changeDate', function(selected){
+                jQuery('#employmentStartDate').val('');
+                jQuery('#employmentStartDate').prop('disabled',false);
+                var startDate = new Date(selected.date.valueOf());
+                startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));
+                jQuery('#employmentStartDate').datepicker({
+                    container:jQuery('#employmentStartDate').closest('div.custom_width'),
+                    format: "yyyy-mm-dd",
+                    orientation:'bottom left',
+                    endDate: new Date(),
+                    autoclose: true
+                });
+                jQuery('#employmentStartDate').datepicker('setStartDate', startDate);
+            });
+        });
+        jQuery(document).on('focus','#employmentStartDate',function(){
+            var cur_input = jQuery(this);
+            jQuery('#employmentStartDate').datepicker({
+                container:jQuery('#employmentStartDate').closest('div.custom_width'),
+                format: "yyyy-mm-dd",
+                orientation:'bottom left',
+                endDate: new Date(),
+                autoclose: true
+            }).on('hide', function (e) {
+                e.preventDefault();
+                jQuery(cur_input).removeAttr('style');
+            });
+        });
+        
+        jQuery(document).on('change','#country',function(){
+            var c_code = jQuery(this).find(":selected").attr('data-countryCode');
+            jQuery('#ssn').val('');
+            if(c_code!='US'){
+                jQuery('#ssn').closest('li').hide();
+                jQuery('#ssn').prop('disabled','disabled');
+            }
+            else{
+                jQuery('#ssn').closest('li').show();
+                jQuery('#ssn').prop('disabled',false);
+            }
+            jQuery.ajax({
+                url: "<?php echo(Mage::getBaseUrl() . 'clxfunding/ClxAPI/getStateList'); ?>",
+                data : {'country_code':c_code},
+                type:'post',
+                dataType: 'html',
+                success: function (response)
+                {
+                    if(response!='error')
+                    {
+                        jQuery('#state').closest('div.custom_width').html(response);
+                    }
+                },
+                beforeSend: function () {
+                    jQuery('#loading_div').show();
+                },
+                complete: function () {
+                    jQuery(document).find('#loading_div').hide();
+                }
+            });
+        });
+        jQuery('#p_method_clxfunding').prop('checked', false); // uncheck online loan initially
+        /* to show help link along with radio button */
+        jQuery('<a href="javascript:void(0);" class="clx_info" title="About CLX Funding"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN); ?>frontend/base/default/css/Clx/help.png"/></a>').insertAfter(jQuery('#p_method_clxfunding').next('label'));
+        jQuery('#p_method_clxfunding').click(function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            jQuery(document).find('#loading_div').remove();
+            jQuery('<div id="loading_div"></div>').insertAfter(jQuery(this).next('label'));
+            jQuery('#loading_div').show();
+            jQuery(this).prop('disabled', 'disabled'); // double click problem
+            jQuery(document).find('#clxLoanApplicationModal').remove();// remove Modal if instance exist
+            jQuery(this).prop('checked', false); //not checking radio button until loan application form submited
+            /* fetch loan application form & show in popup */
+            jQuery.ajax({
+                url: "<?php echo(Mage::getBaseUrl() . 'clxfunding/ClxAPI/getLoanApplicationForm'); ?>", // path to controller function ClxAPIController.php
+                dataType: 'json',
+                success: function (response)
+                {
+                    if (response.valid)
+                    {
+                        jQuery(document).find('#loading_div').remove();
+                        jQuery(document).find('#clxLoanApplicationModal').remove();
+                        var loanAppForm = response.loan_app_view;
+                        jQuery(loanAppForm).find('#loading_div').hide();
+                        jQuery(loanAppForm).modal({backdrop: 'static', keyboard: false}); // show modal
+                        jQuery('body').css({"padding-right": "0px"});
+                    }
+                    else
+                    {
+                        jQuery(document).find('#loading_div').remove();
+                    }
+                },
+                beforeSend: function () {
+                    jQuery('#loading_div').show();
+                },
+                complete: function () {
+                    jQuery(document).find('#loading_div').hide();
+                    jQuery('#p_method_clxfunding').prop('disabled', false); // avoid double click call
+                }
+            });
+            /* end */
+        });
+
+        jQuery(document).on('click', '.clx_info', function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            var current_element = jQuery(this);
+            jQuery(current_element).addClass('not-active');
+            jQuery.ajax({
+                url: "<?php echo(Mage::getBaseUrl() . 'clxfunding/ClxAPI/aboutCLXFunding'); ?>",
+                type: 'post',
+                success: function (res)
+                {
+                    bootbox.dialog({
+                        message: res,
+                        title: "About Online Loan",
+                        className:'textAlign_c',
+                    });
+                },
+                complete: function ()
+                {
+                    jQuery(current_element).removeClass('not-active');
+                }
+            });
+        });
+        /* modal form tabs */
+        jQuery(document).on('click', "#clxLoanApplicationModal .nav-tabs a", function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            if (jQuery(this).closest('li').hasClass('disabled')) {
+                return false;
+            }
+            else
+            {
+                jQuery('#clxLoanApplicationModal .nav-tabs a').each(function () {
+                    jQuery(this).css('display', 'block');
+                });
+
+                jQuery('#clxLoanApplicationModal .nav-tabs li').removeClass('active');
+                jQuery(this).parent('li').addClass('active');
+
+                var id = jQuery(this).attr('href');
+                jQuery('#clxLoanApplicationModal #clx-loanform .tab-pane').removeClass('active in');
+                jQuery(id).addClass('active in');
+                var current_li = jQuery(this).parent().index();
+                if (current_li == 2) // loan application (confirmation & submit) tab add button prev,check eligibility,submit
+                {
+<?php
+if ($show_loan_offer_flag) {
+    ?>
+                        jQuery('#clxLoanApplicationModal').find('.modal-footer').html('<a href="javascript:void(0);" class="btn btn-default clx_common_next_prev_btn" data-tab="1" data-btn="prev">Previous</a><a href="javascript:void(0);" class="btn btn-default clx_check_eligibility_btn">Get Loan Offers</a><a href="javascript:void(0);" class="btn btn-primary clx_loan_application_submit_btn">Create Loan Application</a>');
+<?php
+} else {
+    ?>
+                        jQuery('#clxLoanApplicationModal').find('.modal-footer').html('<a href="javascript:void(0);" class="btn btn-default clx_common_next_prev_btn" data-tab="1" data-btn="prev">Previous</a><a href="javascript:void(0);" class="btn btn-primary clx_loan_application_submit_btn">Create Loan Application</a>');
+<?php } ?>
+                }
+                else
+                {
+                    if (current_li == 1)// loan application (Bank Details & SSN) tab add button next,prev
+                    {
+                        jQuery('#clxLoanApplicationModal').find('.modal-footer').html('<a href="javascript:void(0);" class="btn btn-default clx_common_next_prev_btn" data-tab="0" data-btn="prev">Previous</a><a href="javascript:void(0);" class="btn btn-default clx_common_next_prev_btn" data-tab="2" data-btn="next">Next</a>');
+                    }
+                    else // loan application (Personal Information) tab add button next
+                    {
+                        jQuery('#clxLoanApplicationModal').find('.modal-footer').html('<a href="javascript:void(0);" class="btn btn-default clx_common_next_prev_btn" data-tab="1" data-btn="next">Next</a>');
+                    }
+                }
+            }
+        });
+        /* end */
+        /* common event handle next & prev steps*/
+        jQuery(document).on('click', '.clx_common_next_prev_btn', function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            
+            var temp_id = jQuery('#clxLoanApplicationModal ul.nav-tabs li.active a').attr('href');
+            var current_form_id = jQuery(temp_id).find('form').attr('id');
+            var currentFormValidate = new VarienForm(current_form_id, true);
+            var ssn = jQuery('#'+current_form_id).find('#ssn').val();
+            Validation.add('custom-ssn','Please enter a valid 9 digit SSN (for example xxxxxxxxx)',function(ssn){
+                if(ssn.match(/^\d{9}$/))
+                {
+                    return true;
+                }
+                return false;
+            });
+            Validation.add('custom-dob','Age should be above 18',function(birthDate){
+                var dateold = new Date(birthDate);
+                var datenew = new Date();
+                var age = dateDiff(dateold, datenew);
+                if(age>=18)
+                {
+                    return true;
+                }
+                return false;
+            });
+            
+            if (currentFormValidate.validator.validate() || jQuery(this).data('btn') == 'prev') {
+                jQuery('.nav-tabs li').removeClass('active');
+                var tab_index = jQuery(this).data('tab');
+                if (tab_index == 1)// loan application (Bank Details & SSN) tab add button next,prev
+                {
+                    jQuery('#clxLoanApplicationModal').find('#selfReportedCreditScore').focus();
+                    jQuery('#clxLoanApplicationModal').find('.modal-footer').html('<a href="javascript:void(0);" class="btn btn-default clx_common_next_prev_btn" data-tab="0" data-btn="prev">Previous</a><a href="javascript:void(0);" class="btn btn-default clx_common_next_prev_btn" data-tab="2" data-btn="next">Next</a>');
+                }
+                else if (tab_index == 2)// loan application (confirmation & submit) tab add button prev,check eligibility,submit
+                {
+                    jQuery('#clxLoanApplicationModal').find('#loanPurpose').focus();
+<?php
+if ($show_loan_offer_flag) {
+    ?>
+                        jQuery('#clxLoanApplicationModal').find('.modal-footer').html('<a href="javascript:void(0);" class="btn btn-default clx_common_next_prev_btn" data-tab="1" data-btn="prev">Previous</a><a href="javascript:void(0);" class="btn btn-default clx_check_eligibility_btn">Get Loan Offers</a><a href="javascript:void(0);" class="btn btn-primary clx_loan_application_submit_btn">Create Loan Application</a>');
+<?php
+} else {
+    ?>
+                        jQuery('#clxLoanApplicationModal').find('.modal-footer').html('<a href="javascript:void(0);" class="btn btn-default clx_common_next_prev_btn" data-tab="1" data-btn="prev">Previous</a><a href="javascript:void(0);" class="btn btn-primary clx_loan_application_submit_btn">Create Loan Application</a>');
+<?php } ?>
+                }
+                else// loan application (Personal Information) tab add button next
+                {
+                    jQuery('#clxLoanApplicationModal').find('#firstName').focus();
+                    jQuery('#clxLoanApplicationModal').find('.modal-footer').html('<a href="javascript:void(0);" class="btn btn-default clx_common_next_prev_btn" data-tab="1" data-btn="next">Next</a>');
+                }
+                var next_li = jQuery('.nav-tabs li').eq(tab_index);
+                jQuery(next_li).addClass('active');
+                jQuery(next_li).removeClass('disabled');
+                jQuery(next_li).find('a').data('toggle', 'tab');
+                var id = jQuery(next_li).find('a').attr('href');
+                jQuery('#clx-loanform .tab-pane').removeClass('active in');
+                jQuery(id).addClass('active in');
+            }
+            else
+            {
+                return false;
+            }
+
+        });
+        /* end */
+        /*jQuery('.nav-tabs a').on('shown.bs.tab', function (event) {
+         var x = jQuery(event.target).text();         // active tab
+         var y = jQuery(event.relatedTarget).text();  // previous tab
+         jQuery(".act span").text(x);
+         jQuery(".prev span").text(y);
+         });*/
+        /* loan application form submit */
+
+        jQuery(document).on('click', '.clx_loan_offer_accept', function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            
+            var current_element = jQuery(this);
+            jQuery(current_element).addClass('disabled');
+            jQuery('#loanApplicationForm').modal('hide');
+            var serializeData = jQuery('#personal_information_form1,#bankdetails_and_ssn_form2,#confirmation_and_submit_form3').serializeArray();
+            var selected_loan_offer = jQuery('.clx_loan_offer_select:checked');
+            serializeData.push({name: 'loanOfferId', value: jQuery(selected_loan_offer).val()});
+            serializeData.push({name: 'paymentAmount', value: jQuery(selected_loan_offer).data('paymentamount')});
+            serializeData.push({name: 'loanTerm', value: jQuery(selected_loan_offer).data('loanterm')});
+            serializeData.push({name: 'loanAPR', value: jQuery(selected_loan_offer).data('loanapr')});
+            serializeData.push({name: 'loanRate', value: jQuery(selected_loan_offer).data('loanrate')});
+            serializeData.push({name: 'showSelectedOfferUrl', value: jQuery(selected_loan_offer).data('showselectedofferurl')});
+            serializeData.push({name: 'lenderName', value: jQuery(selected_loan_offer).data('lendername')});
+            serializeData.push({name: 'paymentFrequency', value: jQuery(selected_loan_offer).data('paymentfrequency')});
+            serializeData.push({name: 'downPayment', value: jQuery(selected_loan_offer).data('downpayment')});
+            
+            var current_tr = jQuery('.clx_loan_offer_select:checked').closest('tr').clone(true);
+            jQuery(current_tr).find('td').first().remove();
+            //jQuery(current_tr).find('td').last().remove();
+            if(!(jQuery(current_tr).find('td').last().hasClass('last'))){
+                jQuery(current_tr).find('td').last().remove();
+            }
+            
+            <?php /*
+            jQuery.ajax({
+                url: "<?php echo(Mage::getBaseUrl() . 'clxfunding/ClxAPI/storeSelectedLoanOffer'); ?>",
+                data: serializeData,
+                type: 'post',
+                dataType: 'json',
+                success: function (res)
+                {
+                    
+                    jQuery(current_element).removeClass('disabled');
+                    if (res.valid)
+                    {
+                        jQuery(document).find('#p_method_clxfunding').prop('checked', 'checked');
+                        jQuery(document).find('#clxLoanApplicationModal').remove();
+                        jQuery(document).find('#loanApplicationForm').remove();
+                        payment.save(); // proceed to next step
+                    }
+                    else
+                    {
+                        jQuery(document).find('#p_method_clxfunding').prop('checked', false);
+                        jQuery(document).find('#clxLoanApplicationModal').remove();
+                        jQuery(document).find('#loanApplicationForm').remove();
+                    }
+                }
+            });
+            <?php */ ?>
+                        
+            var custom_table = '<table class="table table-bordered"><caption><h5>Offer selected by you </h5></caption><thead><tr><th>Monthly Payment</th><th>Terms</th><th>APR(%)</th><th>Loan Rate(%)</th></tr></thead><tbody><tr>' + jQuery(current_tr).html() + '</tr></tbody></table>';
+            bootbox.dialog({
+                message: custom_table,
+                title: "Confirmation",
+                className:'textAlign_c',
+                closeButton: false,
+                buttons: {
+                    success: {
+                        label: "Yes",
+                        className: "btn-success",
+                        callback: function () {
+                            jQuery.ajax({
+                                url: "<?php echo(Mage::getBaseUrl() . 'clxfunding/ClxAPI/storeSelectedLoanOffer'); ?>",
+                                data: serializeData,
+                                type: 'post',
+                                dataType: 'json',
+                                success: function (res)
+                                {
+                                    removeModalFromBody();
+                                    jQuery(current_element).removeClass('disabled');
+                                    if (res.valid)
+                                    {
+                                        jQuery(document).find('#p_method_clxfunding').prop('checked', 'checked');
+                                        jQuery(document).find('#clxLoanApplicationModal').remove();
+                                        jQuery(document).find('#loanApplicationForm').remove();
+                                        payment.save(); // proceed to next step
+                                    }
+                                    else
+                                    {
+                                        jQuery(document).find('#p_method_clxfunding').prop('checked', false);
+                                        jQuery(document).find('#clxLoanApplicationModal').remove();
+                                        jQuery(document).find('#loanApplicationForm').remove();
+                                    }
+                                }
+                            });
+                        }
+                    },
+                    danger: {
+                        label: "No",
+                        className: "btn-danger",
+                        callback: function () {
+                            jQuery(current_element).removeClass('disabled');
+                            jQuery('#loanApplicationForm').modal('show');
+                            ModalOpenFix();
+                        }
+                    }
+                }
+            });
+            jQuery('body').css({"padding-right": "0px"});
+        });
+        jQuery(document).on('click', '.clx_loan_offer_back', function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            jQuery(this).closest('.modal').remove();
+            jQuery(document).find('#clxLoanApplicationModal').modal('show');
+            ModalOpenFix();
+        });
+        /* continue button after loan application accepted by clx*/
+        jQuery(document).on('click', '.clx_funding_continue', function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            jQuery.ajax({
+                url: "<?php echo(Mage::getBaseUrl() . 'clxfunding/ClxAPI/setLoanApplicationSess'); ?>",
+                dataType: 'json',
+                success: function (res)
+                {
+                    removeModalFromBody();
+                    if (res.valid)
+                    {
+                        jQuery(document).find('#p_method_clxfunding').prop('checked', 'checked');
+                        jQuery(this).closest('.modal').remove();
+                        jQuery(document).find('#clxLoanApplicationModal').modal('hide');
+                        payment.save(); // proceed to next step
+                    }
+                }
+            });
+
+        });
+        jQuery(document).on('click', '.clx_funding_return', function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            jQuery(this).closest('.modal').remove();
+            jQuery(document).find('#clxLoanApplicationModal').remove();
+            jQuery(document).find('#loanApplicationForm').remove();
+            jQuery(document).find('#loanApplicationStatus').remove();
+            jQuery(document).find('#loading_div').remove();
+            removeModalFromBody();
+        });
+        /* form submit on button click check eligibility,submit button click*/
+        jQuery(document).on('click', '.clx_check_eligibility_btn,.clx_loan_application_submit_btn', function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            jQuery('#loading_div').show();
+            var btn_flag = jQuery(this);
+            jQuery(btn_flag).addClass('disabled');
+            if (jQuery(this).hasClass('clx_modal_form_submit_btn'))//next button
+            {
+                jQuery("#clxLoanApplicationModal").find('#clx_btn_flag').val('next');
+            }
+            else if (jQuery(this).hasClass('clx_check_eligibility_btn'))
+            {
+                jQuery("#clxLoanApplicationModal").find('#clx_btn_flag').val('check_eligibility');
+            }
+            else
+            {
+                jQuery("#clxLoanApplicationModal").find('#clx_btn_flag').val('loan_apply');
+            }
+            loan_application_form_submit(btn_flag);
+        });
+        /* loan form close event - uncheck radio button*/
+        jQuery('body').delegate('.clx_modal_form_close', 'click', function () {
+            jQuery('#p_method_clxfunding').prop('checked', false);
+            removeModalFromBody();
+
+        });
+        /* end */
+        
+    jQuery(document).on("shown.bs.modal","#clxLoanApplicationModal,#loanApplicationForm", function () {
+        jQuery("body").addClass("modal-open");
+        jQuery("body").css("padding-right","0px");
+    });
+    
+    function ModalOpenFix(){
+        console.log(jQuery(document).find('body'));
+        jQuery(document).find('body').addClass("modal-open1");
+        jQuery(document).find('body').css({"padding-right":"0px"});
+    }    
+    function removeModalFromBody(){
+        jQuery(document).find('body').removeClass('modal-open');
+        jQuery(document).find('body').css({'padding-right':'0px'});
+    }    
+    function loan_application_form_submit(btn_flag)
+    {
+        var url = jQuery('#clxLoanApplicationModal').find('#loan_application_redirect_url').val();
+
+        var form1 = new VarienForm('personal_information_form1', true);
+        var form2 = new VarienForm('bankdetails_and_ssn_form2', true);
+        var form3 = new VarienForm('confirmation_and_submit_form3', true);
+
+        if (form1.validator.validate() && form2.validator.validate() && form3.validator.validate()) {
+            jQuery.ajax({
+                url: url,
+                data: jQuery('#personal_information_form1,#bankdetails_and_ssn_form2,#confirmation_and_submit_form3').serialize(),
+                type: 'post',
+                dataType: 'json',
+                success: function (response)
+                {
+                    jQuery('#loading_div').hide();
+                    jQuery(btn_flag).removeClass('disabled');
+                    //response.flag possible values - C.next btn validation,2.check eligibility,3.submit button
+                    if (response.flag)
+                    {
+                        if (response.flag == 'C')
+                        {
+                            if (response.valid)
+                            {
+                                jQuery('#clxLoanApplicationModal .nav-tabs li a').removeClass('custom-clx-error');
+                                jQuery('#personal_information_form1,#bankdetails_and_ssn_form2,#confirmation_and_submit_form3').find('.input-text').each(function () {
+                                    var cur_node = jQuery(this);
+                                    jQuery(cur_node).removeClass('validation-passed');
+                                    jQuery(cur_node).closest('div').find('.validation-advice').remove();
+                                });
+                            }
+                            else
+                            {
+                                var err_arr = response.error_messages;
+                                var err_tab_flag_arr = response.tab_flag;
+                                jQuery('#personal_information_form1,#bankdetails_and_ssn_form2,#confirmation_and_submit_form3').find('.input-text').each(function () {
+
+                                    var cur_node = jQuery(this);
+                                    if (jQuery(this).attr('name') in err_arr) // add server side validation
+                                    {
+                                        jQuery(cur_node).removeClass('validation-passed');
+                                        jQuery(cur_node).addClass('validation-failed');
+                                        jQuery(cur_node).closest('div').find('.validation-advice').remove();
+                                        jQuery('<div class="validation-advice" style="">' + err_arr[jQuery(this).attr('name')] + '</div>').insertAfter(jQuery(cur_node));
+                                    }
+                                    else
+                                    {
+                                        jQuery(cur_node).removeClass('validation-passed');
+                                        jQuery(cur_node).closest('div').find('.validation-advice').remove();
+                                    }
+                                });
+                                var t_flag = 0;
+                                jQuery('#clxLoanApplicationModal .nav-tabs li a').removeClass('custom-clx-error');
+                                jQuery.each(err_tab_flag_arr, function (i, val) {
+                                    jQuery('#clxLoanApplicationModal .nav-tabs li').eq(val - 1).find('a').addClass('custom-clx-error');
+                                    if (val == 1)
+                                    {
+                                        t_flag = 1;
+                                    }
+                                    if (val == 2)
+                                    {
+                                        if (t_flag != 1)
+                                            t_flag = 2;
+                                    }
+                                    if (val == 3)
+                                    {
+                                        if (t_flag != 1 && t_flag != 2)
+                                            t_flag = 3;
+                                    }
+                                });
+                                jQuery('.nav-tabs li').removeClass('active');
+                                var tab_index = t_flag - 1;
+                                if (tab_index == 1)// loan application (Bank Details & SSN) tab add button next,prev
+                                {
+                                    jQuery('#clxLoanApplicationModal').find('.modal-footer').html('<a href="javascript:void(0);" class="btn btn-default clx_common_next_prev_btn" data-tab="0" data-btn="prev">Previous</a><a href="javascript:void(0);" class="btn btn-default clx_common_next_prev_btn" data-tab="2" data-btn="next">Next</a>');
+                                }
+                                else if (tab_index == 2)// loan application (confirmation & submit) tab add button prev,check eligibility,submit
+                                {
+    <?php
+    if ($show_loan_offer_flag) {
+        ?>
+                                        jQuery('#clxLoanApplicationModal').find('.modal-footer').html('<a href="javascript:void(0);" class="btn btn-default clx_common_next_prev_btn" data-tab="1" data-btn="prev">Previous</a><a href="javascript:void(0);" class="btn btn-default clx_check_eligibility_btn">Get Loan Offers</a><a href="javascript:void(0);" class="btn btn-primary clx_loan_application_submit_btn">Create Loan Application</a>');
+    <?php
+    } else {
+        ?>
+                                        jQuery('#clxLoanApplicationModal').find('.modal-footer').html('<a href="javascript:void(0);" class="btn btn-primary clx_common_next_prev_btn" data-tab="1" data-btn="prev">Previous</a><a href="javascript:void(0);" class="btn btn-default clx_loan_application_submit_btn">Create Loan Application</a>');
+    <?php } ?>
+                                }
+                                else// loan application (Personal Information) tab add button next
+                                {
+                                    jQuery('#clxLoanApplicationModal').find('.modal-footer').html('<a href="javascript:void(0);" class="btn btn-default clx_common_next_prev_btn" data-tab="1" data-btn="next">Next</a>');
+                                }
+                                var cur_li = jQuery('.nav-tabs li').eq(tab_index);
+                                jQuery(cur_li).addClass('active');
+                                jQuery(cur_li).removeClass('disabled');
+                                jQuery(cur_li).find('a').data('toggle', 'tab');
+                                var id = jQuery(cur_li).find('a').attr('href');
+                                jQuery('#clx-loanform .tab-pane').removeClass('active in');
+                                jQuery(id).addClass('active in');
+                            }
+                        }
+                        else if (response.flag == 2)
+                        {
+                            jQuery('#clxLoanApplicationModal .nav-tabs li a').removeClass('custom-clx-error');
+                            jQuery('#personal_information_form1,#bankdetails_and_ssn_form2,#confirmation_and_submit_form3').find('.input-text').each(function () {
+                                var cur_node = jQuery(this);
+                                jQuery(cur_node).removeClass('validation-passed');
+                                jQuery(cur_node).closest('div').find('.validation-advice').remove();
+                            });
+                            /* call loan offer api */
+                            if (response.redirect_url != '')  // response.redirect_url - path to controller function
+                            {
+                                jQuery.ajax({
+                                    url: response.redirect_url,
+                                    data: jQuery('#personal_information_form1,#bankdetails_and_ssn_form2,#confirmation_and_submit_form3').serialize(),
+                                    type: 'post',
+                                    dataType: 'json',
+                                    success: function (ret_data)
+                                    {
+                                        if (ret_data.valid)
+                                        {
+                                            if (jQuery('#clxLoanApplicationModal').length)
+                                            {
+                                                jQuery('#clxLoanApplicationModal').modal('hide');
+                                            }
+                                            if (jQuery('#loanApplicationForm').length)
+                                            {
+                                                jQuery('#loanApplicationForm').modal('hide');
+                                            }
+                                            var offerView = ret_data.offer_view;
+                                            jQuery(offerView).modal({backdrop: 'static', keyboard: false});
+                                        }
+                                        else
+                                        {
+                                            bootbox.dialog({
+                                                message: "We are sorry to inform you that your loan application cannot be processed further.",
+                                                title: "Notification",
+                                                className:'textAlign_c',
+                                            });
+                                        }
+                                    },
+                                    beforeSend: function () {
+                                        jQuery('#loading_div').show();
+                                    },
+                                    complete: function () {
+                                        jQuery('#loading_div').hide();
+                                    }
+                                });
+                            }
+                        }
+                        else if (response.flag == 3)//
+                        {
+                            jQuery('#clxLoanApplicationModal .nav-tabs li a').removeClass('custom-clx-error');
+                            jQuery('#personal_information_form1,#bankdetails_and_ssn_form2,#confirmation_and_submit_form3').find('.input-text').each(function () {
+                                var cur_node = jQuery(this);
+                                jQuery(cur_node).removeClass('validation-passed');
+                                jQuery(cur_node).closest('div').find('.validation-advice').remove();
+                            });
+                            /* call loan application api */
+                            if (response.redirect_url != '')
+                            {
+                                jQuery.ajax({
+                                    url: response.redirect_url, // response.redirect_url - path to controller function
+                                    data: jQuery('#personal_information_form1,#bankdetails_and_ssn_form2,#confirmation_and_submit_form3').serialize(),
+                                    type: 'post',
+                                    dataType: 'json',
+                                    success: function (ret_data)
+                                    {
+                                        if (ret_data.valid)
+                                        {
+                                            if (jQuery('#clxLoanApplicationModal').length)
+                                            {
+                                                jQuery('#clxLoanApplicationModal').modal('hide');
+                                            }
+                                            if (jQuery('#loanApplicationForm').length)
+                                            {
+                                                jQuery('#loanApplicationForm').modal('hide');
+                                            }
+                                            var offerView = ret_data.offer_view;
+                                            jQuery(offerView).modal({backdrop: 'static', keyboard: false});
+                                        }
+                                        else
+                                        {
+                                            bootbox.dialog({
+                                                message: "We are sorry to inform you that your loan application cannot be processed further.",
+                                                title: "Notification",
+                                                className:'textAlign_c',
+                                            });
+                                        }
+                                    },
+                                    beforeSend: function () {
+                                        jQuery('#loading_div').show();
+                                    },
+                                    complete: function () {
+                                        jQuery('#loading_div').hide();
+                                    }
+                                });
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if(!response.valid && !response.flag)
+                        {
+                            bootbox.dialog({
+                                message: "We are sorry to inform you that your loan application cannot be processed further.",
+                                title: "Notification",
+                                className:'textAlign_c',
+                            });
+                        }
+                    }
+                }
+
+            });
+        }
+        else {
+            jQuery('#loading_div').hide();
+            jQuery(btn_flag).removeClass('disabled');
+        }
+    }
+    function dateDiff(dateold, datenew)
+    {
+        var ynew = datenew.getFullYear();
+        var mnew = datenew.getMonth();
+        var dnew = datenew.getDate();
+        var yold = dateold.getFullYear();
+        var mold = dateold.getMonth();
+        var dold = dateold.getDate();
+        var diff = ynew - yold;
+        if(mold > mnew) diff--;
+        else
+        {
+          if(mold == mnew)
+          {
+            if(dold > dnew) diff--;
+          }
+        }
+        return diff;
+    }
+    
+    
+    Validation.addAllThese([
+            ['validate-select', 'Please select an option.', function(v) {
+                return ((v != "none") && (v != null) && (v.length != 0));
+            }],
+            ['required-entry', 'This is a required field.', function(v) {
+                return !Validation.get('IsEmpty').test(v);
+            }],
+            ['validate-number', 'Please enter a valid number.', function(v) {
+                return Validation.get('IsEmpty').test(v) || (!isNaN(parseNumber(v)) && !/^\s+$/.test(parseNumber(v)));
+            }],
+            ['validate-digits', 'Please use numbers only in this field.', function(v) {
+                return Validation.get('IsEmpty').test(v) ||  !/[^\d]/.test(v);
+            }],
+            ['validate-digits-range', 'The value is not within the specified range.', function(v, elm) {
+                var result = Validation.get('IsEmpty').test(v) ||  !/[^\d]/.test(v);
+                var reRange = new RegExp(/^digits-range-[0-9]+-[0-9]+$/);
+                $w(elm.className).each(function(name, index) {
+                    if (name.match(reRange) && result) {
+                        var min = parseInt(name.split('-')[2], 10);
+                        var max = parseInt(name.split('-')[3], 10);
+                        var val = parseInt(v, 10);
+                        result = (v >= min) && (v <= max);
+                    }
+                });
+                return result;
+            }],
+            ['validate-email', 'Please enter a valid email address.', function (v) {
+                return Validation.get('IsEmpty').test(v) || /^([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*@([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*\.(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]){2,})$/i.test(v)
+            }],
+            ['validate-ssn', 'Please enter a valid social security number.', function(v) {
+            return Validation.get('IsEmpty').test(v) || /^\d{3}-?\d{2}-?\d{4}$/.test(v);
+            }],
+            ['validate-zip-international', 'Please enter a valid zip code.', function(v) {
+                return true;
+            }],
+            ['validate-greater-than-zero', 'Loan Terms should be greater than 0.', function(v) {
+                if(v.length)
+                    return parseFloat(v) > 0;
+                else
+                    return true;
+            }],
+    
+            ['validate-mobile-number', 'Mobile number should not greater than 10 digits.', function (v, elm) {
+                var reMax = new RegExp(/^maximum-length-[0-9]+$/);
+                var reMin = new RegExp(/^minimum-length-[0-9]+$/);
+                var result = true;
+                $w(elm.className).each(function(name, index) {
+                    if (name.match(reMax) && result) {
+                       var length = name.split('-')[2];
+                       result = (v.length <= length);
+                    }
+                    if (name.match(reMin) && result && !Validation.get('IsEmpty').test(v)) {
+                        var length = name.split('-')[2];
+                        result = (v.length >= length);
+                    }
+                });
+                return result;
+            }],
+            ['validate-mobile-phone-area-code', 'This should not greater than 3 digits', function (v, elm) {
+                var reMax = new RegExp(/^maximum-length-[0-9]+$/);
+                var reMin = new RegExp(/^minimum-length-[0-9]+$/);
+                var result = true;
+                $w(elm.className).each(function(name, index) {
+                    if (name.match(reMax) && result) {
+                       var length = name.split('-')[2];
+                       result = (v.length <= length);
+                    }
+                    if (name.match(reMin) && result && !Validation.get('IsEmpty').test(v)) {
+                        var length = name.split('-')[2];
+                        result = (v.length >= length);
+                    }
+                });
+                return result;
+            }],
+     
+    ]);
+});
+</script>
+

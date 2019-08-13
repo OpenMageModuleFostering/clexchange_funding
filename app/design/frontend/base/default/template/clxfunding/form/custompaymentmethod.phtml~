@@ -1,0 +1,118 @@
+<?php 
+/*
+<div class="form-list" id="payment_form_<?php echo $this->getMethodCode();?>" style="display:block;">
+    <div>
+        <label><?php echo $this->__('Custom Field One') ?>*</label>
+        <span>
+            <input type="text" title="<?php echo $this->__('Custom Field One') ?>" name="payment[custom_field_one]" value="<?php echo $this->htmlEscape($this->getInfoData('custom_field_one')) ?>" />
+        </span>
+    </div>
+    <div>
+        <label><?php echo $this->__('Custom Field Two') ?>*</label>
+        <span>
+            <input type="text" title="<?php echo $this->__('Custom Field Two') ?>" name="payment[custom_field_two]" value="<?php echo $this->htmlEscape($this->getInfoData('custom_field_two')) ?>" />
+        </span>
+    </div>
+</div>
+<div>
+    <?php echo $this->getMethod()->getConfigData('message'); ?>
+</div>
+*/?>
+<script type="text/javascript">
+    //< ![CDATA[
+    var customForm = new VarienForm('my-clxloan-form', true);
+    //]]>
+</script>
+<script>
+    jQuery(document).ready(function(jQuery) {
+        
+        jQuery('#p_method_custompaymentmethod').click(function() {
+            jQuery(this).prop('checked',false);
+            jQuery('#myModal').modal({backdrop: 'static', keyboard: false});  
+            jQuery('#myModal').find('#my-clxloan-form')[0].reset();
+            jQuery('#myModal').find('#my-clxloan-form').find('.input-text').not('select,input[type="submit"]').val('');
+            jQuery('#myModal').find('#my-clxloan-form').find('.input-text').each(function(){
+                jQuery(this).removeClass('validation-failed');
+                jQuery(this).next('.validation-advice').remove(); 
+            });
+            jQuery('#myModal').find('.nav-tabs li').first().trigger('click');
+            //jQuery('#myModal').modal('show');
+            jQuery('#myModal').find('.input-text').removeAttr('disabled');
+        });
+        jQuery(".nav-tabs a").click(function(e) {
+            e.preventDefault();
+//            jQuery(this).tab('show');
+
+            jQuery('.nav-tabs li').removeClass('active');
+            jQuery(this).parent('li').addClass('active');
+
+            var id = jQuery(this).attr('href');
+            jQuery('#clx-loanform .tab-pane').removeClass('active in');
+            jQuery(id).addClass('active in');
+        });
+        jQuery('.nav-tabs a').on('shown.bs.tab', function(event) {
+            var x = jQuery(event.target).text();         // active tab
+            var y = jQuery(event.relatedTarget).text();  // previous tab
+            jQuery(".act span").text(x);
+            jQuery(".prev span").text(y);
+        });
+        jQuery(document).on('submit','#my-clxloan-form',function(event){
+            event.preventDefault();
+            var url = jQuery(this).data('action');
+            jQuery.ajax({
+                        url:url,
+                        data:jQuery(this).serialize(),
+                        type:'post',
+                        dataType:'json',
+                        success:function(response)
+                        {
+                            if(response.valid)
+                            {
+                                jQuery('#my-clxloan-form').find('.input-text').each(function(){
+                                    var cur_node = jQuery(this);
+                                    jQuery(cur_node).removeClass('validation-passed');
+                                    if(jQuery(cur_node).next().hasClass('validation-advice'))
+                                    {
+                                        jQuery(cur_node).next().remove();
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                var err_arr = response.error_messages;
+                                jQuery('#my-clxloan-form').find('.input-text').each(function(){
+                                    
+                                    var cur_node = jQuery(this);
+                                    if(jQuery(this).attr('name') in err_arr)
+                                    {
+                                        jQuery(cur_node).removeClass('validation-passed');
+                                        jQuery(cur_node).addClass('validation-failed');
+                                        if(jQuery(cur_node).next().hasClass('validation-advice'))
+                                        {
+                                            jQuery(cur_node).next().remove();
+                                        }
+                                        jQuery('<div class="validation-advice" style="">'+err_arr[jQuery(this).attr('name')]+'</div>').insertAfter(jQuery(cur_node));
+                                    }
+                                    else
+                                    {
+                                        jQuery(cur_node).removeClass('validation-passed');
+                                        if(jQuery(cur_node).next().hasClass('validation-advice'))
+                                        {
+                                            jQuery(cur_node).next().remove();
+                                        }
+                                    }
+                                });
+                            }
+                        }
+            });
+        });
+        /*jQuery('body').delegate('.submitss','click',function(){
+            jQuery(this).closest('form').attr('action');
+            alert(jQuery('#my-clxloan-form').attr('action'));
+        });*/
+        jQuery('body').delegate('.clx_modal_form_close','click',function(){
+            jQuery('#p_method_custompaymentmethod').prop('checked', false);
+        });
+        
+    });
+</script>

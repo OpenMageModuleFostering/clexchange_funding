@@ -1,0 +1,48 @@
+<?php
+
+class CLExchange_Clexchangefunding_Model_Observer {
+    /* This function to check extension configured with all required information, if not Hide CLXFunding else Show */
+
+    public function paymentMethodIsActive(Varien_Event_Observer $observer) {
+
+        /* extension core config data */
+        /*$isEnabled = Mage::helper('core')->isModuleEnabled('CLExchange_Funding');
+        if(isset($isEnabled) && !empty($isEnabled) && $isEnabled)
+        {*/
+            $clx_config_var = new Mage_Core_Model_Config();
+            $accountId = Mage::getStoreConfig('payment/clxfunding/account_id'); //Account ID
+            $authorizationField = Mage::getStoreConfig('payment/clxfunding/authorization_field'); //Authorization Key
+            $isBestOffer = Mage::getStoreConfig('payment/clxfunding/is_Best_Offer'); //isBestOffer
+            $queue_authentication_key = Mage::getStoreConfig('payment/clxfunding/queue_authentication_key'); //Queue authentication key
+            $queue_endpoint = Mage::getStoreConfig('payment/clxfunding/queue_endpoint'); //queue endpoint
+            $cron_schedule = Mage::getStoreConfig('payment/clxfunding/cron_expr'); //cron
+            // if all required configuration parameters set then only show CLX Funding Button 
+            if (!(isset($accountId) && !empty($accountId) &&
+                    isset($authorizationField) && !empty($authorizationField) &&
+                    isset($isBestOffer) && !empty($isBestOffer) &&
+                    isset($queue_authentication_key) && !empty($queue_authentication_key) &&
+                    isset($queue_endpoint) && !empty($queue_endpoint) &&
+                    isset($cron_schedule) && !empty($cron_schedule))) {
+
+                $clx_config_var->saveConfig('payment/clxfunding/active', "0"); // to disable module (hide CLX Funding radio button)
+            } else {
+                $clx_config_var->saveConfig('payment/clxfunding/active', "1"); // to enable module(show CLX Funding radio button )
+            }
+       // }
+    }
+
+    /* following function for getting Queue Response & processing order accordingly */
+
+    public function checkCron() {
+        Mage::getModel('clxfunding/CronOrderStatusUpdate')->updateClxOrderStatus();
+    }
+
+    /* Order cancel if customer not responding to loan offer mail notification */
+
+    public function timeframeCancelOrder() {
+        Mage::getModel('clxfunding/CronOrderStatusUpdate')->cancelOrderAfterTimeExpire();
+    }
+
+}
+
+?>

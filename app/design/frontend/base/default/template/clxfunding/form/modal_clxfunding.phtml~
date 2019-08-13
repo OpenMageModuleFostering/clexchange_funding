@@ -1,0 +1,398 @@
+<div id="loading_div"></div>
+<div id="clxLoanApplicationModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <input type="hidden" id="loan_application_redirect_url" value="<?php echo Mage::getBaseUrl() . 'clxfunding/ClxAPI/loanAppProcessing'; ?>"/>
+        <!--Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="javascript:void(0);" class="btn btn-default clx_modal_form_css clx_modal_form_close clx_modal_close" data-dismiss="modal">x</a>
+                <center><h5 class="modal-title">CLEXCHANGE LOAN APPLICATION</h5></center>
+            </div>
+            <div class="modal-body">
+                <div class="fieldset">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" style="display:block !important;" href="#home">Personal Information</a></li>
+                        <li class="disabled"><a href="#menu2">Bank Details & SSN</a></li>
+                        <li class="disabled"><a href="#menu3">Confirmation & Submit</a></li>
+                    </ul>
+                    <ul id="clx-loanform" class="form-list tab-content">
+                        <p class="required">* Required Fields</p><br/>
+                        <div id="home" class="tab-pane fade in active">
+                            <form action="javascript:void(0)" id="personal_information_form1" role="form">
+                                <input type="hidden" id="clx_btn_flag" name="clx_btn_flag" value=""/>
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="login-email" class="required"><em>*</em>First Name:</label>
+                                            <div class="input-box custom_width">
+                                                <input type="text" autocapitalize="on" autocorrect="off" spellcheck="false" class="input-text required-entry validate-no-html-tags validate-alpha-spac" id="firstName" name="firstName" value="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="login-email" class="required"><em>*</em>Last Name:</label>
+                                            <div class="input-box custom_width">
+                                                <input type="text" autocapitalize="on" autocorrect="off" spellcheck="false" class="input-text required-entry validate-no-html-tags validate-alpha-spac" id="lastName" name="lastName" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="login-email" class="required"><em>*</em>Email Address:</label>
+                                            <div class="input-box custom_width">
+                                                <input type="email" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry validate-email validate-no-html-tags" id="emailId" name="emailId" value="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="login-email" class="required"><em>*</em>Date of birth:</label>
+                                            <div class="input-box custom_width">
+                                                <input type="text" autocorrect="off" spellcheck="false"  class="input-text required-entry validate-date validate-no-html-tags" id="birthDate" name="birthDate" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="login-email" class="required"><em>*</em>Street:</label>
+                                            <div class="input-box custom_width">
+                                                <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry validate-street validate-no-html-tags" id="street" name="street" value="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="login-email" class="required"><em>*</em>Mobile phone area code:</label>
+                                            <div class="input-box custom_width">
+                                                <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry validate-length maximum-length-3 minimum-length-3 validate-no-html-tags" id="mobilePhoneAreaCode" name="mobilePhoneAreaCode" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="login-email" class="required"><em>*</em>Mobile number:</label>
+                                            <div class="input-box custom_width">
+                                                <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry validate-number validate-length maximum-length-10 validate-no-html-tags" id="mobileNumber" name="mobileNumber" value="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="login-email" class="required"><em>*</em>City:</label>
+                                            <div class="input-box custom_width">
+                                                <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="input-text required-entry validate-alpha-spac validate-no-html-tags" id="city" name="city" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="login-email" class="required"><em>*</em>State:</label>
+                                            <div class="input-box custom_width">
+                                                <select class="input-text select_input_f validate-select validate-no-html-tags"  id="state" name="state">
+                                                    <option value="">Please select state</option>
+                                                    <option value="Alabama">Alabama</option>
+                                                    <option value="Alaska">Alaska</option>
+                                                    <option value="Arizona">Arizona</option>
+                                                    <option value="Arkansas">Arkansas</option>
+                                                    <option value="California">California</option>
+                                                    <option value="Colorado">Colorado</option>
+                                                    <option value="Connecticut">Connecticut</option>
+                                                    <option value="Delaware">Delaware</option>
+                                                    <option value="District Of Columbia">District Of Columbia</option>
+                                                    <option value="Florida">Florida</option>
+                                                    <option value="Georgia">Georgia</option>
+                                                    <option value="Hawaii">Hawaii</option>
+                                                    <option value="Idaho">Idaho</option>
+                                                    <option value="Illinois">Illinois</option>
+                                                    <option value="Indiana">Indiana</option>
+                                                    <option value="Iowa">Iowa</option>
+                                                    <option value="Kansas">Kansas</option>
+                                                    <option value="Kentucky">Kentucky</option>
+                                                    <option value="Louisiana">Louisiana</option>
+                                                    <option value="Maine">Maine</option>
+                                                    <option value="Maryland">Maryland</option>
+                                                    <option value="Massachusetts">Massachusetts</option>
+                                                    <option value="Michigan">Michigan</option>
+                                                    <option value="Minnesota">Minnesota</option>
+                                                    <option value="Mississippi">Mississippi</option>
+                                                    <option value="Missouri">Missouri</option>
+                                                    <option value="Montana">Montana</option>
+                                                    <option value="Nebraska">Nebraska</option>
+                                                    <option value="Nevada">Nevada</option>
+                                                    <option value="New Hampshire">New Hampshire</option>
+                                                    <option value="New Jersey">New Jersey</option>
+                                                    <option value="New Mexico">New Mexico</option>
+                                                    <option value="New York">New York</option>
+                                                    <option value="North Carolina">North Carolina</option>
+                                                    <option value="North Dakota">North Dakota</option>
+                                                    <option value="Ohio">Ohio</option>
+                                                    <option value="Oklahoma">Oklahoma</option>
+                                                    <option value="Oregon">Oregon</option>
+                                                    <option value="Pennsylvania">Pennsylvania</option>
+                                                    <option value="Rhode Island">Rhode Island</option>
+                                                    <option value="South Carolina">South Carolina</option>
+                                                    <option value="South Dakota">South Dakota</option>
+                                                    <option value="Tennessee">Tennessee</option>
+                                                    <option value="Texas">Texas</option>
+                                                    <option value="Utah">Utah</option>
+                                                    <option value="Vermont">Vermont</option>
+                                                    <option value="Virginia">Virginia</option>
+                                                    <option value="Washington">Washington</option>
+                                                    <option value="West Virginia">West Virginia</option>
+                                                    <option value="Wisconsin">Wisconsin</option>
+                                                    <option value="Wyoming">Wyoming</option>
+                                                    <option value="American Samoa">American Samoa</option>
+                                                    <option value="Guam">Guam</option>
+                                                    <option value="Northern Mariana Islands">Northern Mariana Islands</option>
+                                                    <option value="Puerto Rico">Puerto Rico</option>
+                                                    <option value="United States Minor Outlying Islands">United States Minor Outlying Islands</option>
+                                                    <option value="Virgin Islands">Virgin Islands</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="login-email" class="required"><em>*</em>Zipcode:</label>
+                                            <div class="input-box custom_width">
+                                                <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="validate-no-html-tags input-text required-entry validate-zip validate-length maximum-length-10" id="zipcode" name="zipcode" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="login-email" class="required"><em>*</em>Country:</label>
+                                            <div class="input-box custom_width">
+                                                <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="validate-no-html-tags input-text required-entry validate-alpha-spac" id="country" name="country" value="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="login-email" class="required"><em>*</em>Yearly Income(<?php echo(Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol()); ?>):</label>
+                                            <div class="input-box custom_width">
+                                                <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="validate-no-html-tags input-text required-entry validate-number" id="yearlyIncome" name="yearlyIncome" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="login-email" class="required"><em>*</em>Employment status:</label>
+                                            <div class="input-box custom_width">
+                                                <select class="input-text select_input_f validate-select validate-no-html-tags"  id="employmentStatus" name="employmentStatus">
+                                                    <option value="">Please select employment status</option>
+                                                    <option value="Self Employed">Self Employed</option>
+                                                    <option value="Not Employed">Not Employed</option>
+                                                    <option value="Other">Other</option>
+                                                    <option value="Employed">Employed</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="login-email" class="required"><em>*</em>Occupation:</label>
+                                            <div class="input-box custom_width">
+                                                <select class="input-text select_input_f validate-select validate-no-html-tags"  id="occupation" name="occupation">
+                                                    <option value="">Please select occupation</option>
+                                                    <option value="Accountant/CPA">Accountant/CPA</option>
+                                                    <option value="Analyst">Analyst</option>
+                                                    <option value="Architect">Architect</option>
+                                                    <option value="Attorney">Attorney</option>
+                                                    <option value="Biologist">Biologist</option>
+                                                    <option value="Bus Driver">Bus Driver</option>
+                                                    <option value="Car Dealer">Car Dealer</option>
+                                                    <option value="Chemist">Chemist</option>
+                                                    <option value="Civil Service">Civil Service</option>
+                                                    <option value="Clergy">Clergy</option>
+                                                    <option value="Clerical">Clerical</option>
+                                                    <option value="Computer Programmer">Computer Programmer</option>
+                                                    <option value="Construction">Construction</option>
+                                                    <option value="Dentist">Dentist</option>
+                                                    <option value="Doctor">Doctor</option>
+                                                    <option value="Engineer- Chemical">Engineer- Chemical</option>
+                                                    <option value="Engineer- Electrical">Engineer- Electrical</option>
+                                                    <option value="Engineer- Mechanical">Engineer- Mechanical</option>
+                                                    <option value="Executive">Executive</option>
+                                                    <option value="Fireman">Fireman</option>
+                                                    <option value="Flight Attendant">Flight Attendant</option>
+                                                    <option value="Food Service">Food Service</option>
+                                                    <option value="Food Service Management">Food Service Management</option>
+                                                    <option value="Homemaker">Homemaker</option>
+                                                    <option value="Judge">Judge</option>
+                                                    <option value="Laborer">Laborer</option>
+                                                    <option value="Landscaping">Landscaping</option>
+                                                    <option value="Medical Technician">Medical Technician</option>
+                                                    <option value="Military Enlisted">Military Enlisted</option>
+                                                    <option value="Military Officer">Military Officer</option>
+                                                    <option value="Nurse (LPN)">Nurse (LPN)</option>
+                                                    <option value="Nurse (RN)">Nurse (RN)</option>
+                                                    <option value="Nurse's Aide">Nurse's Aide</option>
+                                                    <option value="Pharmacist">Pharmacist</option>
+                                                    <option value="Pilot- Private/Commercial">Pilot- Private/Commercial</option>
+                                                    <option value="Police- Officer/Correction officer">Police- Officer/Correction officer</option>
+                                                    <option value="Postal Service">Postal Service</option>
+                                                    <option value="Principal">Principal</option>
+                                                    <option value="Professional">Professional</option>
+                                                    <option value="Professor">Professor</option>
+                                                    <option value="Psychologist">Psychologist</option>
+                                                    <option value="Realtor">Realtor</option>
+                                                    <option value="Religious">Religious</option>
+                                                    <option value="Retail Management">Retail Management</option>
+                                                    <option value="Sales- Commission">Sales- Commission</option>
+                                                    <option value="Sales- Retails">Sales- Retails</option>
+                                                    <option value="Scientist">Scientist</option>
+                                                    <option value="Administrative Assistant">Administrative Assistant</option>
+                                                    <option value="Skilled Labor">Skilled Labor</option>
+                                                    <option value="Social Worker">Social Worker</option>
+                                                    <option value="Student">Student</option>
+                                                    <option value="Teacher">Teacher</option>
+                                                    <option value="Teacher's Aide">Teacher's Aide</option>
+                                                    <option value="Tradesman- Carpenter">Tradesman- Carpenter</option>
+                                                    <option value="Tradesman- Electrician">Tradesman- Electrician</option>
+                                                    <option value="Tradesman- Mechanic">Tradesman- Mechanic</option>
+                                                    <option value="Tradesman- Plumber">Tradesman- Plumber</option>
+                                                    <option value="Truck Driver">Truck Driver</option>
+                                                    <option value="Waiter/Waitress">Waiter/Waitress</option>
+                                                    <option value="Other">Other</option>
+                                                    <option value="Investor">Investor</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="login-email" class="required"><em>*</em>Employer name:</label>
+                                            <div class="input-box custom_width">
+                                                <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="validate-no-html-tags input-text required-entry validate-alpha-spac" id="employerName" name="employerName" value="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="login-email" class="required"><em>*</em>Employment start date:</label>
+                                            <div class="input-box custom_width">
+                                                <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="validate-no-html-tags input-text required-entry validate-date" id="employmentStartDate" name="employmentStartDate" value="">
+                                            </div>
+                                        </div>
+                                    </div>    
+                                </li>
+                            </form>
+                        </div>
+                        <div id="menu2" class="tab-pane fade">
+                            <form action="javascript:void(0)" id="bankdetails_and_ssn_form2" role="form">
+                                <li>
+                                    <label for="login-email" class="required"><em>*</em>Self reported credit score:</label>
+                                    <div class="input-box">
+                                        <select class="input-text select_input_f validate-select validate-no-html-tags"  id="selfReportedCreditScore" name="selfReportedCreditScore">
+                                            <option value="">Please select self Reported Credit score</option>
+                                            <option value="1">Excellent Credit (760+)</option>
+                                            <option value="2">Good Credit (700+) </option>
+                                            <option value="3">Fair Credit (640+) </option>
+                                            <option value="4">Poor Credit</option>
+                                        </select>
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="bankName" class="required"><em>*</em>Bank name:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="validate-no-html-tags input-text required-entry validate-length maximum-length-255" id="bankName" name="bankName" value="">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="firstAccountHolderName" class="required"><em>*</em>First account holder name:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="validate-no-html-tags input-text required-entry validate-alpha-spac validate-length maximum-length-255" id="firstAccountHolderName" name="firstAccountHolderName" value="">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="bankAccountType" class="required"><em>*</em>Bank account type:</label>
+                                    <div class="input-box">
+                                        <select class="input-text select_input_f validate-select validate-no-html-tags"  id="bankAccountType" name="bankAccountType">
+                                            <option value="">Please select bank account type</option>
+                                            <option value="Savings">Savings</option>
+                                            <option value="Checking">Checking</option>
+                                            <option value="Credit">Credit</option>
+                                        </select>
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="bankAccountNumber" class="required"><em>*</em>Bank account number:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="validate-no-html-tags input-text required-entry validate-number validate-length maximum-length-30" id="bankAccountNumber" name="bankAccountNumber" value="">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="routingNumber" class="required"><em>*</em>Routing number:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="validate-no-html-tags input-text required-entry validate-length maximum-length-255" id="routingNumber" name="routingNumber" value="">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="ssn" class="required"><em>*</em>ssn:</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="validate-no-html-tags input-text required-entry validate-ssn" id="ssn" name="ssn" value="">
+                                    </div>
+                                </li>
+                            </form>
+                        </div>
+                        <div id="menu3" class="tab-pane fade">
+                            <form action="javascript:void(0)" id="confirmation_and_submit_form3" role="form">
+                                <li>
+                                    <label for="loanAmount" class="required"><em>*</em>Loan amount:(<?php echo(Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol()); ?>)</label>
+                                    <div class="input-box">
+                                        <?php $grand_total = $this->getLoanAmmount(); ?>
+                                        <input type="text" autocapitalize="off" readonly="readonly" autocorrect="off" spellcheck="false" class="validate-no-html-tags input-text required-entry validate-number" id="loanAmount" name="loanAmount" value="<?php echo(isset($grand_total) ? $grand_total : ''); ?>">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="loanPurpose" class="required"><em>*</em>Loan purpose:</label>
+                                    <div class="input-box">
+                                        <select class="input-text select_input_f validate-select validate-no-html-tags"  id="loanPurpose" name="loanPurpose">
+                                            <option value="">Please select loan purpose</option>
+                                            <option value="Debt consolidation">Debt consolidation</option>
+                                            <option value="Home improvement">Home improvement</option>
+                                            <option value="Business">Business</option>
+                                            <option value="Auto">Auto</option>
+                                            <option value="Other">Other</option>
+                                            <option value="Baby & adoption loans">Baby & adoption loans</option>
+                                            <option value="Boat">Boat</option>
+                                            <option value="Cosmetic procedures">Cosmetic procedures</option>
+                                            <option value="Green loans">Green loans</option>
+                                            <option value="Household expenses">Household expenses</option>
+                                            <option value="Large purchases">Large purchases</option>
+                                            <option value="Medical/Dental">Medical/Dental</option>
+                                            <option value="Motorcycle">Motorcycle</option>
+                                            <option value="RV">RV</option>
+                                            <option value="Taxes">Taxes</option>
+                                            <option value="Vacation">Vacation</option>
+                                            <option value="Special Occasion">Special Occasion</option>
+                                        </select>
+                                    </div>
+                                </li>
+                                <li>
+                                    <label for="loanTerms" class="required"><em>*</em>Loan terms (In months):</label>
+                                    <div class="input-box">
+                                        <input type="text" autocapitalize="off" autocorrect="off" spellcheck="false" class="validate-no-html-tags input-text required-entry validate-digits" id="loanTerms" name="loanTerms" value="">
+                                    </div>
+                                </li>
+                            </form>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0);" class="btn btn-default clx_common_next_prev_btn" data-tab="1">Next</a>
+            </div>
+        </div>
+        <!--</form>-->
+    </div>
+</div>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        Validation.add('validate-alpha-spac', 'Allowed only alphabets', function (v) {
+            return Validation.get('IsEmpty').test(v) || /^[a-zA-Z ]+$/.test(v)
+        });
+    });
+</script>
+
+
