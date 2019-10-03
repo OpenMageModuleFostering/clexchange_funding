@@ -1,7 +1,7 @@
 {
-    "name": "OpenMageModuleFostering\/Clexchange_Funding",
+    "name": "openmage-module-fostering\/clexchange_funding",
     "type": "magento-module",
-    "license": "Open-Software-License-(OSL)",
+    "license": "OSL-3.0",
     "homepage": "",
     "description": "CLX Funding allows users to submit an online loan application to lenders from the checkout page itself",
     "authors": [
